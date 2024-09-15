@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="ASCII"?>
+<diagram:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:diagram="http://osate.org/diagram" formatVersion="7">
+  <element uuid="ed51d415-ce53-4da0-9e1b-8df972404710" manual="true">
+    <element uuid="c1c9b2f1-0336-4790-a2fd-258271ad5923" manual="true">
+      <bo>
+        <seg>classifier</seg>
+        <seg>communicationInterface</seg>
+      </bo>
+      <position x="354.4505157470703" y="368.0"/>
+      <size width="193.54949951171875" height="35.0"/>
+    </element>
+    <element uuid="b8cabeb8-99c1-4db7-b3c3-39699eb1badc" manual="true">
+      <element uuid="b935a470-8790-4722-ac49-fdab7832f463" manual="true">
+        <bo>
+          <seg>realization</seg>
+        </bo>
+        <bendpoints>
+          <point x="328.45050048828125" y="325.5"/>
+          <point x="340.45050048828125" y="325.5"/>
+        </bendpoints>
+      </element>
+      <bo>
+        <seg>classifier</seg>
+        <seg>communicationInterface.impl</seg>
+      </bo>
+      <position x="112.75" y="368.0"/>
+      <size width="221.7005157470703" height="35.0"/>
+    </element>
+    <element uuid="b2bc7fdf-fb3e-4ab9-83e5-4508ec75307d" manual="true">
+      <bo>
+        <seg>classifier</seg>
+        <seg>dataRecorder</seg>
+      </bo>
+      <position x="293.6888122558594" y="93.0"/>
+      <size width="132.78775787353516" height="35.0"/>
+    </element>
+    <element uuid="d257455d-791d-4ba5-8a19-0c0d85dc7a65" manual="true">
+      <element uuid="27b18890-4ec1-4bde-ac56-1123215392a3" manual="true">
+        <bo>
+          <seg>realization</seg>
+        </bo>
+        <bendpoints>
+          <point x="267.6888122558594" y="50.500003814697266"/>
+          <point x="279.6888122558594" y="50.500003814697266"/>
+        </bendpoints>
+      </element>
+      <bo>
+        <seg>classifier</seg>
+        <seg>dataRecorder.impl</seg>
+      </bo>
+      <position x="112.75" y="93.0"/>
+      <size width="160.93881225585938" height="35.0"/>
+    </element>
+    <element uuid="6cf658c7-f9e5-427a-952a-8670ca9ead2c" manual="true">
+      <bo>
+        <seg>classifier</seg>
+        <seg>healthMonitor</seg>
+      </bo>
+      <position x="427.1927185058594" y="38.0"/>
+      <size width="132.78775787353516" height="35.0"/>
+    </element>
+    <element uuid="33de0608-24c7-40b5-957c-3388f6b3cb8e" manual="true">
+      <element uuid="14f06553-c55e-4aeb-af14-db44c0d08aed" manual="true">
+        <bo>
+          <seg>realization</seg>
+        </bo>
+        <bendpoints>
+          <point x="401.1927185058594" y="-4.5000104904174805"/>
+          <point x="413.1927185058594" y="-4.5000104904174805"/>
+        </bendpoints>
+      </element>
+      <bo>
+        <seg>classifier</seg>
+        <seg>healthMonitor.impl</seg>
+      </bo>
+      <position x="246.25390625" y="38.0"/>
+      <size width="160.93881225585938" height="35.0"/>
+    </element>
+    <element uuid="2b6a3482-43c7-4774-937b-740fe7c0cd5b" manual="true">
+      <bo>
+        <seg>classifier</seg>
+        <seg>Raspberry</seg>
+      </bo>
+      <position x="112.75" y="38.0"/>
+      <size width="113.50390625" height="35.0"/>
+    </element>
+    <element uuid="6394dfec-0c9a-47a1-802e-8a45b12082df" manual="true">
+      <bo>
+        <seg>classifier</seg>
+        <seg>raspberryContainer</seg>
+      </bo>
+      <position x="332.2174530029297" y="258.0"/>
+      <size width="166.12762451171875" height="35.0"/>
+    </element>
+    <element uuid="2a51b268-dd71-47d7-93ae-87bad5903d80" manual="true">
+      <element uuid="e029d944-0bf6-4d3c-b526-3e470411fd77" manual="true">
+        <bo>
+          <seg>realization</seg>
+        </bo>
+        <bendpoints>
+          <point x="306.21746826171875" y="215.5"/>
+          <point x="318.21746826171875" y="215.5"/>
+        </bendpoints>
+      </element>
+      <bo>
+        <seg>classifier</seg>
+        <seg>raspberryContainer.impl</seg>
+      </bo>
+      <position x="110.0" y="250.0"/>
+      <size width="202.2174530029297" height="43.00000000000006"/>
+    </element>
+    <element uuid="072cb4ed-8b12-4f59-9c92-ccd3ca73158d" manual="true">
+      <bo>
+        <seg>classifier</seg>
+        <seg>raspberryProcess</seg>
+      </bo>
+      <position x="70.0" y="410.0"/>
+      <size width="156.47916412353516" height="35.0"/>
+    </element>
+    <element uuid="af2650fa-5ef9-44e0-88d2-418658f12fb5" manual="true">
+      <element uuid="a1669630-4ff8-4c9e-8534-d6ce66b069a4" manual="true">
+        <element uuid="2208ed27-4877-4122-a356-f3c9afed100b" manual="true">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>c1</seg>
+        </bo>
+      </element>
+      <element uuid="cee5d2e7-3f8b-483a-8f27-97dccfb2bb97" manual="true">
+        <bo>
+          <seg>realization</seg>
+        </bo>
+        <bendpoints>
+          <point x="137.0" y="406.0"/>
+        </bendpoints>
+      </element>
+      <element uuid="2d20d727-b503-4a5a-923d-d510917cbe08" manual="true">
+        <bo>
+          <seg>subcomponent</seg>
+          <seg>communication</seg>
+        </bo>
+        <position x="230.0" y="130.0"/>
+        <size width="146.85678100585938" height="35.0"/>
+      </element>
+      <element uuid="023ba7b8-299c-41db-b6cf-1e7330c9fbe8" manual="true">
+        <bo>
+          <seg>subcomponent</seg>
+          <seg>health</seg>
+        </bo>
+        <position x="260.0" y="190.0"/>
+        <size width="93.51692581176758" height="35.0"/>
+      </element>
+      <bo>
+        <seg>classifier</seg>
+        <seg>raspberryProcess.raspImp</seg>
+      </bo>
+      <position x="20.0" y="470.0"/>
+      <size width="400.0" height="240.0"/>
+    </element>
+    <element uuid="d0cb07bf-e206-45b4-8704-7d7dbfc5bd58" manual="true">
+      <bo>
+        <seg>classifier</seg>
+        <seg>sensorDrivers</seg>
+      </bo>
+      <position x="295.140625" y="148.0"/>
+      <size width="134.2395782470703" height="35.0"/>
+    </element>
+    <element uuid="fdd0ffb7-9a2a-4ec2-bb5e-c566a2da6a64" manual="true">
+      <element uuid="2bf7089a-206e-4871-8c25-542463b7d4dc" manual="true">
+        <bo>
+          <seg>realization</seg>
+        </bo>
+        <bendpoints>
+          <point x="269.140625" y="105.50000762939453"/>
+          <point x="281.140625" y="105.50000762939453"/>
+        </bendpoints>
+      </element>
+      <bo>
+        <seg>classifier</seg>
+        <seg>sensorDrivers.impl</seg>
+      </bo>
+      <position x="112.75" y="148.0"/>
+      <size width="162.39063262939453" height="35.0"/>
+    </element>
+    <element uuid="ac665aa3-1159-4180-878d-f1826263b48b" manual="true">
+      <bo>
+        <seg>classifier</seg>
+        <seg>telemetryServer</seg>
+      </bo>
+      <position x="307.0026092529297" y="203.0"/>
+      <size width="146.10155487060547" height="35.0"/>
+    </element>
+    <element uuid="934c5c75-206f-4e8f-9986-de4aa3d57468" manual="true">
+      <element uuid="88873671-2b90-4ad9-b3a9-727adcbeef55" manual="true">
+        <bo>
+          <seg>realization</seg>
+        </bo>
+        <bendpoints>
+          <point x="281.00262451171875" y="160.5"/>
+          <point x="293.00262451171875" y="160.5"/>
+        </bendpoints>
+      </element>
+      <bo>
+        <seg>classifier</seg>
+        <seg>telemetryServer.impl</seg>
+      </bo>
+      <position x="112.75" y="203.0"/>
+      <size width="174.2526092529297" height="35.0"/>
+    </element>
+    <bo>
+      <seg>package</seg>
+      <seg>raspContainer</seg>
+    </bo>
+    <position x="-10.0" y="-60.0"/>
+    <size width="750.0" height="720.0"/>
+  </element>
+  <config type="package" connectionPrimaryLabelsVisible="false">
+    <enabledAadlProperties/>
+    <context>
+      <seg>package</seg>
+      <seg>raspContainer</seg>
+    </context>
+  </config>
+</diagram:Diagram>

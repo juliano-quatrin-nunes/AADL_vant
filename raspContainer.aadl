@@ -1,0 +1,175 @@
+package raspContainer
+public
+	
+	system raspberryContainer
+	end raspberryContainer;
+	
+	system implementation raspberryContainer.impl
+		subcomponents
+			main: process raspberryProcess.raspImp;	
+			cpu: processor Raspberry;
+			navio2: device navio2;
+			
+		properties
+			Actual_Processor_Binding => (reference (cpu)) applies to main;
+			
+--		connections
+--			ce1: data port navio2.sensors_out -> main.navio2_in;
+	end raspberryContainer.impl;
+
+
+	process raspberryProcess
+		--properties
+	end raspberryProcess;
+	
+	
+	processor Raspberry
+		properties
+			Scheduling_Protocol => (EDF); 
+	end Raspberry;
+	
+	process implementation raspberryProcess.raspImp
+		subcomponents
+			telemetry: thread telemetryServer.impl;
+			sensor: thread sensorDrivers.impl;
+			communication: thread communicationInterface.impl;
+			dataRecorder: thread dataRecorder.impl;
+			health: thread healthMonitor.impl;
+		connections
+			c1: port health.health_out -> communication.health_in;
+			c2: port communication.telemetry_out -> telemetry.telemetry_external_in;
+			c3: port telemetry.ground_commands_out -> communication.ground_commands_in;
+			c4: port sensor.sensor_communication_out -> communication.sensor_in;
+			c5: port communication.record_out -> dataRecorder.record_external_in;
+			c6: port sensor.sensor_record_out -> dataRecorder.record_sensor_in;
+			c7: port sensor.sensor_telemetry_out -> telemetry.telemetry_sensor_in;
+			
+--		features
+--			navio2_in: in data port sensorData.impl;
+			
+	end raspberryProcess.raspImp;
+	
+	
+	------------- DEVICES -------------
+	device navio2
+--		features
+--			sensors_out: out port port sensorData.impl
+	end navio2;
+	
+	------------- THREADS -------------	
+	thread telemetryServer 
+		features
+			telemetry_external_in: in data port telemetryData.impl;
+			telemetry_sensor_in: in data port sensorData.impl;
+			ground_commands_out: out data port groundCommands.impl;
+			ground_commands_in: in data port groundCommands.impl;
+			telemetry_out: out data port telemetryData.impl;
+	end telemetryServer;
+	
+	thread sensorDrivers
+		features
+			sensor_telemetry_out: out data port sensorData.impl;
+			sensor_communication_out: out data port sensorData.impl;
+			sensor_record_out: out data port sensorData.impl;
+			navio2_sensor_in: in data port navioData.impl;
+	end sensorDrivers;
+	
+	thread communicationInterface
+		features
+			health_in: in data port healthMessages.impl;
+			telemetry_out: out data port telemetryData.impl;
+			record_out: out data port recordData.impl;
+			sensor_in: in data port sensorData.impl;
+			ground_commands_in: in data port groundCommands.impl;
+	end communicationInterface;
+	
+	thread dataRecorder
+		features
+			record_external_in: in data port recordData.impl;
+			record_sensor_in: in data port sensorData.impl; -- Repetir o mesmo recordData???
+	end dataRecorder;
+	
+	thread healthMonitor
+		features
+			health_out: out data port healthMessages.impl;
+	end healthMonitor;
+	------------------------------------
+	
+	------------- ALL DATA -------------
+	data healthMessages
+	end healthMessages;
+	
+	data implementation healthMessages.impl
+	end healthMessages.impl;
+	
+	data telemetryData
+	end telemetryData;
+	
+	data implementation telemetryData.impl
+	end telemetryData.impl;
+	
+	data recordData
+	end recordData;
+	
+	data implementation recordData.impl
+	end recordData.impl;
+	
+	data sensorData
+	end sensorData;
+	
+	data implementation sensorData.impl
+	end sensorData.impl;
+	
+	data groundCommands
+	end groundCommands;
+	
+	data implementation groundCommands.impl
+	end groundCommands.impl;
+	
+	data navioData
+	end navioData;
+	
+	data implementation navioData.impl
+	end navioData.impl;
+	------------------------------------
+	
+	thread implementation telemetryServer.impl
+--		properties	
+--			period => 30 ms;
+--			dispatch_protocol => periodic;
+--			deadline => 30 ms;
+--			priority => 5;
+--			compute_execution_time => 5 ms .. 10 ms;
+	end telemetryServer.impl;
+	
+	thread implementation sensorDrivers.impl
+--		properties
+--			period => 20 ms;
+--			dispatch_protocol => periodic;
+--			deadline => 20 ms;
+--			priority => 6;
+--			compute_execution_time => 1 ms .. 10 ms;
+	end sensorDrivers.impl;
+
+	thread implementation communicationInterface.impl
+--		properties
+--			period => 20 ms;
+--			dispatch_protocol => periodic;
+--			deadline => 20 ms;
+--			priority => 6;
+--			compute_execution_time => 1 ms .. 10 ms;
+	end communicationInterface.impl;
+	
+	thread implementation dataRecorder.impl
+--		properties
+--			period => 20 ms;
+--			dispatch_protocol => periodic;
+--			deadline => 20 ms;
+--			priority => 6;
+--			compute_execution_time => 1 ms .. 10 ms;
+	end dataRecorder.impl;
+	
+	thread implementation healthMonitor.impl
+	end healthMonitor.impl;
+
+end raspContainer;
