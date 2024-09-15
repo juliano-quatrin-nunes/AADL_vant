@@ -9,10 +9,13 @@ public
 			main: process raspberryProcess.raspImp;	
 			cpu: processor Raspberry;
 			navio2: device navio2;
+			groundStation: device groundStation;
 			communicationBus: bus communicationBus.impl;
 			
 		connections
-			cs1: port navio2.sensors_out -> main.navio2_in;
+			ce1: port navio2.sensors_out -> main.navio2_in;
+			ce2: port groundStation.commands_out -> main.commands_in;
+			ce3: port main.telemetry_out -> groundStation.telemetry_in;
 	end raspberryContainer.impl;
 
 
@@ -26,6 +29,8 @@ public
 	process raspberryProcess
 		features
 			navio2_in: in data port navioData.impl;
+			commands_in: in data port groundCommands.impl;
+			telemetry_out: out data port telemetryData.impl;
 			bus_requirement: requires myProtocol;
 	end raspberryProcess;
 	
@@ -45,7 +50,8 @@ public
 			c6: port sensor.sensor_record_out -> dataRecorder.record_sensor_in;
 			c7: port sensor.sensor_telemetry_out -> telemetry.telemetry_sensor_in;
 			c8: port navio2_in -> sensor.navio2_sensor_in;
-			
+			c9: port commands_in -> telemetry.ground_commands_in;
+			c10: port telemetry.telemetry_out -> telemetry_out;
 			
 	end raspberryProcess.raspImp;
 	
@@ -65,8 +71,11 @@ public
 			sensors_out: out data port navioData.impl;
 	end navio2;
 	
-	device implementation navio2.impl	
-	end navio2.impl;
+	device groundStation
+		features
+			commands_out: out data port groundCommands.impl;
+			telemetry_in: in data port telemetryData.impl;
+	end groundStation;
 	
 	------------- THREADS -------------	
 	thread telemetryServer 
