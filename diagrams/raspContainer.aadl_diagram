@@ -32,7 +32,7 @@
           <seg>subcomponent</seg>
           <seg>cpu</seg>
         </bo>
-        <position x="20.0" y="40.0"/>
+        <position x="860.0" y="40.0"/>
         <size width="78.68619537353516" height="35.0"/>
       </element>
       <element uuid="a09058cf-f479-49a5-b97f-c64db1b08096" manual="true">
@@ -148,7 +148,7 @@
             <seg>feature</seg>
             <seg>navio2_in</seg>
           </bo>
-          <position y="94.5"/>
+          <position y="140.0"/>
         </element>
         <element uuid="ca2c64c4-9b99-4a4c-b169-7449f0ba71c0" manual="true">
           <bo>
@@ -208,7 +208,7 @@
           <seg>subcomponent</seg>
           <seg>navio2</seg>
         </bo>
-        <position x="10.0" y="180.0"/>
+        <position x="30.0" y="220.0"/>
         <size width="96.47916412353516" height="35.0"/>
       </element>
       <bo>

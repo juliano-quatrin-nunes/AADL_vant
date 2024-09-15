@@ -9,9 +9,10 @@ public
 			main: process raspberryProcess.raspImp;	
 			cpu: processor Raspberry;
 			navio2: device navio2;
+			communicationBus: bus communicationBus.impl;
 			
 		connections
-			ce1: port navio2.sensors_out -> main.navio2_in;
+			cs1: port navio2.sensors_out -> main.navio2_in;
 	end raspberryContainer.impl;
 
 
@@ -25,6 +26,7 @@ public
 	process raspberryProcess
 		features
 			navio2_in: in data port navioData.impl;
+			bus_requirement: requires myProtocol;
 	end raspberryProcess;
 	
 	process implementation raspberryProcess.raspImp
@@ -47,6 +49,15 @@ public
 			
 	end raspberryProcess.raspImp;
 	
+	--------------- BUS ---------------
+	bus communicationBus
+	end communicationBus;
+	
+	bus implementation communicationBus.impl
+	end communicationBus.impl;
+	
+	protocol myProtocol
+	end myProtocol;
 	
 	------------- DEVICES -------------
 	device navio2
@@ -97,6 +108,11 @@ public
 	------------------------------------
 	
 	------------- ALL DATA -------------
+	data comBusData
+	end comBusData;
+	data implementation comBusData.impl
+	end comBusData.impl;
+	
 	data healthMessages
 	end healthMessages;
 	
