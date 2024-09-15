@@ -31,7 +31,7 @@ public
 			navio2_in: in data port navioData.impl;
 			commands_in: in data port groundCommands.impl;
 			telemetry_out: out data port telemetryData.impl;
-			bus_requirement: requires myProtocol;
+			bus_requirement: requires bus access communicationBus;
 	end raspberryProcess;
 	
 	process implementation raspberryProcess.raspImp
@@ -52,6 +52,7 @@ public
 			c8: port navio2_in -> sensor.navio2_sensor_in;
 			c9: port commands_in -> telemetry.ground_commands_in;
 			c10: port telemetry.telemetry_out -> telemetry_out;
+			c11: bus access bus_requirement -> communication.com_bus;
 			
 	end raspberryProcess.raspImp;
 	
@@ -61,10 +62,7 @@ public
 	
 	bus implementation communicationBus.impl
 	end communicationBus.impl;
-	
-	protocol myProtocol
-	end myProtocol;
-	
+
 	------------- DEVICES -------------
 	device navio2
 		features
@@ -102,6 +100,7 @@ public
 			record_out: out data port recordData.impl;
 			sensor_in: in data port sensorData.impl;
 			ground_commands_in: in data port groundCommands.impl;
+			com_bus: requires bus access communicationBus;
 	end communicationInterface;
 	
 	thread dataRecorder
