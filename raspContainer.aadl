@@ -10,23 +10,22 @@ public
 			cpu: processor Raspberry;
 			navio2: device navio2;
 			
-		properties
-			Actual_Processor_Binding => (reference (cpu)) applies to main;
-			
---		connections
---			ce1: data port navio2.sensors_out -> main.navio2_in;
+		connections
+			ce1: port navio2.sensors_out -> main.navio2_in;
 	end raspberryContainer.impl;
 
 
-	process raspberryProcess
-		--properties
-	end raspberryProcess;
-	
-	
 	processor Raspberry
 		properties
 			Scheduling_Protocol => (EDF); 
 	end Raspberry;
+	
+	------------------- PROCESS -------------------
+	
+	process raspberryProcess
+		features
+			navio2_in: in data port navioData.impl;
+	end raspberryProcess;
 	
 	process implementation raspberryProcess.raspImp
 		subcomponents
@@ -43,18 +42,20 @@ public
 			c5: port communication.record_out -> dataRecorder.record_external_in;
 			c6: port sensor.sensor_record_out -> dataRecorder.record_sensor_in;
 			c7: port sensor.sensor_telemetry_out -> telemetry.telemetry_sensor_in;
+			c8: port navio2_in -> sensor.navio2_sensor_in;
 			
---		features
---			navio2_in: in data port sensorData.impl;
 			
 	end raspberryProcess.raspImp;
 	
 	
 	------------- DEVICES -------------
 	device navio2
---		features
---			sensors_out: out port port sensorData.impl
+		features
+			sensors_out: out data port navioData.impl;
 	end navio2;
+	
+	device implementation navio2.impl	
+	end navio2.impl;
 	
 	------------- THREADS -------------	
 	thread telemetryServer 
