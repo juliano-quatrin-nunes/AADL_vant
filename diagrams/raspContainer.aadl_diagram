@@ -22,6 +22,33 @@
           <seg>ce1</seg>
         </bo>
       </element>
+      <element uuid="0af4411c-8e5c-4988-aa5c-baf497f13d1b" manual="true">
+        <element uuid="7b6b903a-e0c8-46fd-96e0-96fd3fc43738" manual="true">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>ce2</seg>
+        </bo>
+      </element>
+      <element uuid="d104fc97-6906-458d-a841-2e2be5f0378e" manual="true">
+        <element uuid="7af5bd4c-236d-4be0-9d3b-06599a5e9f6c" manual="true">
+          <bo>
+            <seg>tag</seg>
+            <seg>unidirectional</seg>
+          </bo>
+        </element>
+        <bo>
+          <seg>connection</seg>
+          <seg>ce3</seg>
+        </bo>
+        <bendpoints>
+          <point x="221.0" y="206.0"/>
+        </bendpoints>
+      </element>
       <element uuid="e029d944-0bf6-4d3c-b526-3e470411fd77" manual="true">
         <bo>
           <seg>realization</seg>
@@ -32,8 +59,16 @@
           <seg>subcomponent</seg>
           <seg>cpu</seg>
         </bo>
-        <position x="20.0" y="40.0"/>
+        <position x="860.0" y="40.0"/>
         <size width="78.68619537353516" height="35.0"/>
+      </element>
+      <element uuid="d5887472-30ed-40b4-b34d-01114c7b99a1" manual="true">
+        <bo>
+          <seg>subcomponent</seg>
+          <seg>groundStation</seg>
+        </bo>
+        <position x="10.0" y="90.0"/>
+        <size width="140.21614837646484" height="36.0"/>
       </element>
       <element uuid="a09058cf-f479-49a5-b97f-c64db1b08096" manual="true">
         <element uuid="c78c7b94-2c84-4200-a442-21ea90017de1" manual="true">
@@ -48,6 +83,18 @@
             <seg>c1</seg>
           </bo>
         </element>
+        <element uuid="84d1e665-5d38-4d3f-8659-1077b7575b03" manual="true">
+          <element uuid="3307be07-8ebf-4d3e-a6cb-8227e65af2f7" manual="true">
+            <bo>
+              <seg>tag</seg>
+              <seg>unidirectional</seg>
+            </bo>
+          </element>
+          <bo>
+            <seg>connection</seg>
+            <seg>c10</seg>
+          </bo>
+        </element>
         <element uuid="8a6df9f4-22de-4610-889d-73138413bd21" manual="true">
           <element uuid="47677749-42bc-4d0e-acb3-7fbcf46eec8a" manual="true">
             <bo>
@@ -60,8 +107,8 @@
             <seg>c2</seg>
           </bo>
           <bendpoints>
-            <point x="552.0" y="241.0"/>
-            <point x="365.0" y="240.0"/>
+            <point x="632.0" y="261.0"/>
+            <point x="445.0" y="260.0"/>
           </bendpoints>
         </element>
         <element uuid="46bea13e-e2f5-4e3f-b427-f55bf7f06dbf" manual="true">
@@ -76,7 +123,7 @@
             <seg>c3</seg>
           </bo>
           <bendpoints>
-            <point x="611.0" y="227.0"/>
+            <point x="691.0" y="247.0"/>
           </bendpoints>
         </element>
         <element uuid="d3ff21f1-e3a3-4f94-8a1f-9ae9c8cc1792" manual="true">
@@ -91,8 +138,8 @@
             <seg>c4</seg>
           </bo>
           <bendpoints>
-            <point x="362.2916564941406" y="292.0"/>
-            <point x="526.3111572265625" y="292.0"/>
+            <point x="442.2916564941406" y="312.0"/>
+            <point x="606.3111572265625" y="312.0"/>
           </bendpoints>
         </element>
         <element uuid="2f173aa7-8b2a-43a4-bc80-1a196ee17ae7" manual="true">
@@ -143,12 +190,38 @@
             <seg>c8</seg>
           </bo>
         </element>
+        <element uuid="a71d0ef3-0751-4220-a932-10e922a7649c" manual="true">
+          <element uuid="f838a597-9bb6-482d-a5bd-e8ca7036f53c" manual="true">
+            <bo>
+              <seg>tag</seg>
+              <seg>unidirectional</seg>
+            </bo>
+          </element>
+          <bo>
+            <seg>connection</seg>
+            <seg>c9</seg>
+          </bo>
+        </element>
+        <element uuid="f058f6a1-c26a-44aa-bd4e-7dfb37452517" manual="true" dockArea="left">
+          <bo>
+            <seg>feature</seg>
+            <seg>commands_in</seg>
+          </bo>
+          <position y="45.0"/>
+        </element>
         <element uuid="1d5c3e7b-f8d3-41f6-b5c0-927f4100de79" manual="true" dockArea="left">
           <bo>
             <seg>feature</seg>
             <seg>navio2_in</seg>
           </bo>
-          <position y="94.5"/>
+          <position y="140.0"/>
+        </element>
+        <element uuid="4b2ce984-cc44-46d5-8dd1-c1681bd31b0d" manual="true" dockArea="left">
+          <bo>
+            <seg>feature</seg>
+            <seg>telemetry_out</seg>
+          </bo>
+          <position/>
         </element>
         <element uuid="ca2c64c4-9b99-4a4c-b169-7449f0ba71c0" manual="true">
           <bo>
@@ -200,16 +273,16 @@
           <seg>subcomponent</seg>
           <seg>main</seg>
         </bo>
-        <position x="160.0" y="60.0"/>
-        <size width="655.1445159912109" height="290.0"/>
+        <position x="240.0" y="80.0"/>
+        <size width="530.0" height="290.0"/>
       </element>
       <element uuid="a3f00264-6824-45e6-aef5-05000818afcb" manual="true">
         <bo>
           <seg>subcomponent</seg>
           <seg>navio2</seg>
         </bo>
-        <position x="10.0" y="180.0"/>
-        <size width="96.47916412353516" height="35.0"/>
+        <position x="30.0" y="220.0"/>
+        <size width="96.47916412353516" height="40.0"/>
       </element>
       <bo>
         <seg>classifier</seg>
