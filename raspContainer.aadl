@@ -1,20 +1,36 @@
 package raspContainer
 public
+	with interSystemCom;
 	
 	system raspberryContainer
+		features
+			com_bus: requires bus access interSystemCom::communicationInterfaceBus.impl;
+			
 	end raspberryContainer;
 	
-	system implementation raspberryContainer.impl
+	system implementation RaspberryContainer.impl
 		subcomponents
-			main: process raspberryProcess.raspImp;	
+			telemetry: process TelemetryProcess.server;	
+			health_and_recorder: process HealthMonitorAndDataRecorder.impl;
 			cpu: processor Raspberry;
-			navio2: device navio2;
-			groundStation: device groundStation;
+			navio2: device Navio2;
+			ground_station: device GroundStation;
+			communication_interface: device CommunicationInterface;
+			sensor_driver: device SensorDriver;
 			
 		connections
-			ce1: port navio2.sensors_out -> main.navio2_in;
-			ce2: port groundStation.commands_out -> main.commands_in;
-			ce3: port main.telemetry_out -> groundStation.telemetry_in;
+			c1: port navio2.sensors_out -> sensor_driver.navio2_sensor_in;
+			c2: port health_and_recorder.health_out -> communication_interface.health_in;
+			c3: port telemetry.ground_commands_out -> communication_interface.ground_commands_in;
+			c4: port sensor_driver.sensor_communication_out -> communication_interface.sensor_in;
+			c5: port communication_interface.record_out -> health_and_recorder.record_external_in;
+			c6: port sensor_driver.sensor_record_out -> health_and_recorder.record_sensor_in;
+			c7: port sensor_driver.sensor_telemetry_out -> telemetry.telemetry_sensor_in;
+			c8: port navio2.sensors_out -> sensor_driver.navio2_sensor_in;
+			c9: port ground_station.commands_out -> telemetry.ground_commands_in;
+			c10: port telemetry.telemetry_out -> ground_station.telemetry_in;
+			c11: port communication_interface.telemetry_out -> telemetry.telemetry_external_in;
+			c12: bus access com_bus -> communication_interface.inter_system_bus;
 	end raspberryContainer.impl;
 
 
@@ -23,97 +39,79 @@ public
 			Scheduling_Protocol => (EDF); 
 	end Raspberry;
 	
-	------------------- PROCESS -------------------
+	------------------- PROCESSES -------------------
 	
-	process raspberryProcess
+	process TelemetryProcess
 		features
-			navio2_in: in data port navioData.impl;
-			commands_in: in data port groundCommands.impl;
-			telemetry_out: out data port telemetryData.impl;
-	end raspberryProcess;
+			telemetry_external_in: in data port TelemetryData.impl;
+			telemetry_sensor_in: in data port SensorData.impl;
+			ground_commands_out: out event port;
+			ground_commands_in: in event port;
+			telemetry_out: out data port TelemetryData.impl;
+	end TelemetryProcess;
 	
-	process implementation raspberryProcess.raspImp
-		subcomponents
-			telemetry: thread telemetryServer.impl;
-			sensor: thread sensorDrivers.impl;
-			communication: thread communicationInterface.impl;
-			dataRecorder: thread dataRecorder.impl;
-			health: thread healthMonitor.impl;
-		connections
-			c1: port health.health_out -> communication.health_in;
-			c2: port communication.telemetry_out -> telemetry.telemetry_external_in;
-			c3: port telemetry.ground_commands_out -> communication.ground_commands_in;
-			c4: port sensor.sensor_communication_out -> communication.sensor_in;
-			c5: port communication.record_out -> dataRecorder.record_external_in;
-			c6: port sensor.sensor_record_out -> dataRecorder.record_sensor_in;
-			c7: port sensor.sensor_telemetry_out -> telemetry.telemetry_sensor_in;
-			c8: port navio2_in -> sensor.navio2_sensor_in;
-			c9: port commands_in -> telemetry.ground_commands_in;
-			c10: port telemetry.telemetry_out -> telemetry_out;
-			
-	end raspberryProcess.raspImp;
+	process implementation TelemetryProcess.server
+	end TelemetryProcess.server;
+	
+	process HealthMonitorAndDataRecorder 
+		features
+			record_external_in: in data port RecordData.impl;
+			record_sensor_in: in data port SensorData.impl;
+			health_out: out event port;
+	end HealthMonitorAndDataRecorder;
+	
+	process implementation HealthMonitorAndDataRecorder.impl
+		
+	end HealthMonitorAndDataRecorder.impl;
 	
 	
 	------------- DEVICES -------------
-	device navio2
+	device Navio2
 		features
-			sensors_out: out data port navioData.impl;
-	end navio2;
+			sensors_out: out data port NavioData.impl;
+	end Navio2;
 	
-	device groundStation
+	device GroundStation
 		features
-			commands_out: out data port groundCommands.impl;
-			telemetry_in: in data port telemetryData.impl;
-	end groundStation;
+			commands_out: out event port;
+			telemetry_in: in data port TelemetryData.impl;
+	end GroundStation;
+	
+	device CommunicationInterface
+		features 
+			inter_system_bus: requires bus access interSystemCom::CommunicationInterfaceBus;
+			health_in: in event port;
+			telemetry_out: out data port TelemetryData.impl;
+			record_out: out data port RecordData.impl;
+			sensor_in: in data port SensorData.impl;
+			ground_commands_in: in event port;
+	end CommunicationInterface;
+	
+	device SensorDriver
+		features
+			sensor_telemetry_out: out data port SensorData.impl;
+			sensor_communication_out: out data port SensorData.impl;
+			sensor_record_out: out data port SensorData.impl;
+			navio2_sensor_in: in data port NavioData.impl;
+	end SensorDriver;
 	
 	------------- THREADS -------------	
-	thread telemetryServer 
-		features
-			telemetry_external_in: in data port telemetryData.impl;
-			telemetry_sensor_in: in data port sensorData.impl;
-			ground_commands_out: out data port groundCommands.impl;
-			ground_commands_in: in data port groundCommands.impl;
-			telemetry_out: out data port telemetryData.impl;
-	end telemetryServer;
-	
-	thread sensorDrivers
-		features
-			sensor_telemetry_out: out data port sensorData.impl;
-			sensor_communication_out: out data port sensorData.impl;
-			sensor_record_out: out data port sensorData.impl;
-			navio2_sensor_in: in data port navioData.impl;
-	end sensorDrivers;
-	
-	thread communicationInterface
-		features
-			health_in: in data port healthMessages.impl;
-			telemetry_out: out data port telemetryData.impl;
-			record_out: out data port recordData.impl;
-			sensor_in: in data port sensorData.impl;
-			ground_commands_in: in data port groundCommands.impl;
-	end communicationInterface;
-	
-	thread dataRecorder
-		features
-			record_external_in: in data port recordData.impl;
-			record_sensor_in: in data port sensorData.impl; -- Repetir o mesmo recordData???
-	end dataRecorder;
-	
-	thread healthMonitor
-		features
-			health_out: out data port healthMessages.impl;
-	end healthMonitor;
+--	thread DataRecorder
+--	end dataRecorder;
+--	
+--	thread HealthMonitor
+--	end HealthMonitor;
 	------------------------------------
 	
 	------------- ALL DATA -------------
-	data healthMessages
-	end healthMessages;
+	data HealthMessages
+	end HealthMessages;
 	
-	data implementation healthMessages.impl
-	end healthMessages.impl;
+	data implementation HealthMessages.impl
+	end HealthMessages.impl;
 	
-	data telemetryData
-	end telemetryData;
+	data TelemetryData
+	end TelemetryData;
 	
 	data implementation telemetryData.impl
 	end telemetryData.impl;
@@ -130,56 +128,11 @@ public
 	data implementation sensorData.impl
 	end sensorData.impl;
 	
-	data groundCommands
-	end groundCommands;
-	
-	data implementation groundCommands.impl
-	end groundCommands.impl;
-	
 	data navioData
 	end navioData;
 	
 	data implementation navioData.impl
 	end navioData.impl;
 	------------------------------------
-	
-	thread implementation telemetryServer.impl
---		properties	
---			period => 30 ms;
---			dispatch_protocol => periodic;
---			deadline => 30 ms;
---			priority => 5;
---			compute_execution_time => 5 ms .. 10 ms;
-	end telemetryServer.impl;
-	
-	thread implementation sensorDrivers.impl
---		properties
---			period => 20 ms;
---			dispatch_protocol => periodic;
---			deadline => 20 ms;
---			priority => 6;
---			compute_execution_time => 1 ms .. 10 ms;
-	end sensorDrivers.impl;
-
-	thread implementation communicationInterface.impl
---		properties
---			period => 20 ms;
---			dispatch_protocol => periodic;
---			deadline => 20 ms;
---			priority => 6;
---			compute_execution_time => 1 ms .. 10 ms;
-	end communicationInterface.impl;
-	
-	thread implementation dataRecorder.impl
---		properties
---			period => 20 ms;
---			dispatch_protocol => periodic;
---			deadline => 20 ms;
---			priority => 6;
---			compute_execution_time => 1 ms .. 10 ms;
-	end dataRecorder.impl;
-	
-	thread implementation healthMonitor.impl
-	end healthMonitor.impl;
 
 end raspContainer;
