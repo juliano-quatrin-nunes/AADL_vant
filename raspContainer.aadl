@@ -15,8 +15,8 @@ public
 			cpu: processor Raspberry;
 			navio2: device Navio2;
 			ground_station: device GroundStation;
-			communication_interface: device CommunicationInterface;
-			sensor_driver: device SensorDriver;
+			communication_interface: process CommunicationInterface.impl;
+			sensor_driver: process SensorDriver.impl;
 			
 		connections
 			c1: port navio2.sensors_out -> sensor_driver.navio2_sensor_in;
@@ -30,11 +30,13 @@ public
 			c9: port ground_station.commands_out -> telemetry.ground_commands_in;
 			c10: port telemetry.telemetry_out -> ground_station.telemetry_in;
 			c11: port communication_interface.telemetry_out -> telemetry.telemetry_external_in;
-			c12: bus access com_bus -> communication_interface.inter_system_bus;
+			c12: bus access com_bus -> cpu.com_bus;
 	end raspberryContainer.impl;
 
 
 	processor Raspberry
+		features
+			com_bus: requires bus access interSystemCom::communicationInterfaceBus.impl;
 		properties
 			Scheduling_Protocol => (EDF); 
 	end Raspberry;
@@ -61,8 +63,33 @@ public
 	end HealthMonitorAndDataRecorder;
 	
 	process implementation HealthMonitorAndDataRecorder.impl
-		
+		subcomponents
+			health_thread: thread HealthMonitor;
+			data_recorder: thread DataRecorder;
 	end HealthMonitorAndDataRecorder.impl;
+	
+	process CommunicationInterface
+		features 
+			health_in: in event port;
+			telemetry_out: out data port TelemetryData.impl;
+			record_out: out data port RecordData.impl;
+			sensor_in: in data port SensorData.impl;
+			ground_commands_in: in event port;
+	end CommunicationInterface;
+	
+	process implementation CommunicationInterface.impl
+	end CommunicationInterface.impl;
+	
+	process SensorDriver
+		features
+			sensor_telemetry_out: out data port SensorData.impl;
+			sensor_communication_out: out data port SensorData.impl;
+			sensor_record_out: out data port SensorData.impl;
+			navio2_sensor_in: in data port NavioData.impl;
+	end SensorDriver;
+	
+	process implementation SensorDriver.impl
+	end SensorDriver.impl;
 	
 	
 	------------- DEVICES -------------
@@ -77,30 +104,12 @@ public
 			telemetry_in: in data port TelemetryData.impl;
 	end GroundStation;
 	
-	device CommunicationInterface
-		features 
-			inter_system_bus: requires bus access interSystemCom::CommunicationInterfaceBus;
-			health_in: in event port;
-			telemetry_out: out data port TelemetryData.impl;
-			record_out: out data port RecordData.impl;
-			sensor_in: in data port SensorData.impl;
-			ground_commands_in: in event port;
-	end CommunicationInterface;
-	
-	device SensorDriver
-		features
-			sensor_telemetry_out: out data port SensorData.impl;
-			sensor_communication_out: out data port SensorData.impl;
-			sensor_record_out: out data port SensorData.impl;
-			navio2_sensor_in: in data port NavioData.impl;
-	end SensorDriver;
-	
 	------------- THREADS -------------	
---	thread DataRecorder
---	end dataRecorder;
---	
---	thread HealthMonitor
---	end HealthMonitor;
+	thread DataRecorder
+	end DataRecorder;
+	
+	thread HealthMonitor
+	end HealthMonitor;
 	------------------------------------
 	
 	------------- ALL DATA -------------
