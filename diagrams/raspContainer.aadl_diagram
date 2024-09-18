@@ -70,7 +70,7 @@
           <seg>c2</seg>
         </bo>
         <bendpoints>
-          <point x="1002.0" y="741.0"/>
+          <point x="1002.0" y="621.0"/>
         </bendpoints>
       </element>
       <element uuid="c569b0fe-09a5-45b1-b99e-b0879e91e019" manual="true">
@@ -109,7 +109,7 @@
           <seg>c5</seg>
         </bo>
         <bendpoints>
-          <point x="1118.0" y="802.0"/>
+          <point x="1118.0" y="682.0"/>
         </bendpoints>
       </element>
       <element uuid="8c935846-d986-45ce-9f5d-06374e332fd3" manual="true">
@@ -124,7 +124,7 @@
           <seg>c6</seg>
         </bo>
         <bendpoints>
-          <point x="511.0" y="786.0"/>
+          <point x="511.0" y="666.0"/>
         </bendpoints>
       </element>
       <element uuid="ef20609f-d897-4461-a8de-686782878466" manual="true">
@@ -427,7 +427,7 @@
         <seg>classifier</seg>
         <seg>RaspberryContainer.impl</seg>
       </bo>
-      <position x="110.0" y="120.0"/>
+      <position x="110.0"/>
       <size width="1270.0" height="760.0"/>
     </element>
     <bo>
