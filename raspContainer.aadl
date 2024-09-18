@@ -66,6 +66,10 @@ public
 		subcomponents
 			health_thread: thread HealthMonitor;
 			data_recorder: thread DataRecorder;
+		connections
+			c1: port record_external_in -> data_recorder.com_record;
+			c2: port record_sensor_in -> data_recorder.sensor_record;
+			c3: port health_thread.health_out -> health_out;
 	end HealthMonitorAndDataRecorder.impl;
 	
 	process CommunicationInterface
@@ -106,9 +110,14 @@ public
 	
 	------------- THREADS -------------	
 	thread DataRecorder
+		features
+			sensor_record: in data port SensorData.impl;
+			com_record: in data port RecordData.impl;
 	end DataRecorder;
 	
 	thread HealthMonitor
+		features
+			health_out: out event port;
 	end HealthMonitor;
 	------------------------------------
 	

@@ -249,19 +249,55 @@
         <size width="188.0" height="130.0"/>
       </element>
       <element uuid="94803e90-a912-4716-a63b-4f720d224a99" manual="true">
+        <element uuid="c673c299-8cad-453a-b660-5d761b296a7b" manual="true">
+          <element uuid="ede1bbf8-a3e7-4b87-bf7f-6d87f51703ad" manual="true">
+            <bo>
+              <seg>tag</seg>
+              <seg>unidirectional</seg>
+            </bo>
+          </element>
+          <bo>
+            <seg>connection</seg>
+            <seg>c1</seg>
+          </bo>
+        </element>
+        <element uuid="c3456167-f355-4536-9ac2-96e3dee89bf6" manual="true">
+          <element uuid="1a8aef36-1eb3-48c9-b5af-48af8de7d521" manual="true">
+            <bo>
+              <seg>tag</seg>
+              <seg>unidirectional</seg>
+            </bo>
+          </element>
+          <bo>
+            <seg>connection</seg>
+            <seg>c2</seg>
+          </bo>
+        </element>
+        <element uuid="9242c2e9-19a6-4ea6-a571-e8530b4dbe59" manual="true">
+          <element uuid="81c2482e-c75e-4222-8172-b4f586307f63" manual="true">
+            <bo>
+              <seg>tag</seg>
+              <seg>unidirectional</seg>
+            </bo>
+          </element>
+          <bo>
+            <seg>connection</seg>
+            <seg>c3</seg>
+          </bo>
+        </element>
         <element uuid="047b8714-b1d2-4a4a-9a9a-d4e9d1d75677" manual="true" dockArea="right">
           <bo>
             <seg>feature</seg>
             <seg>health_out</seg>
           </bo>
-          <position x="163.17840576171875" y="40.0"/>
+          <position x="343.17840576171875" y="40.0"/>
         </element>
         <element uuid="abed4b2a-c2fd-415b-af72-59c3d7f27db7" manual="true" dockArea="right">
           <bo>
             <seg>feature</seg>
             <seg>record_external_in</seg>
           </bo>
-          <position x="115.02083587646484" y="100.0"/>
+          <position x="295.02083587646484" y="100.0"/>
         </element>
         <element uuid="6f6350f3-aeda-42cb-a1e5-a5182a993094" manual="true" dockArea="left">
           <bo>
@@ -270,12 +306,28 @@
           </bo>
           <position y="85.0"/>
         </element>
+        <element uuid="6cb34433-d41f-4079-a316-dbab44d40ff2" manual="true">
+          <bo>
+            <seg>subcomponent</seg>
+            <seg>data_recorder</seg>
+          </bo>
+          <position x="90.0" y="120.0"/>
+          <size width="140.203125" height="36.0"/>
+        </element>
+        <element uuid="c49ecfa3-ec7c-421e-850b-88a94b661aca" manual="true">
+          <bo>
+            <seg>subcomponent</seg>
+            <seg>health_thread</seg>
+          </bo>
+          <position x="230.0" y="30.0"/>
+          <size width="138.73828887939453" height="36.0"/>
+        </element>
         <bo>
           <seg>subcomponent</seg>
           <seg>health_and_recorder</seg>
         </bo>
-        <position x="710.0" y="580.0"/>
-        <size width="237.45704650878906" height="170.0"/>
+        <position x="530.0" y="580.0"/>
+        <size width="417.45704650878906" height="170.0"/>
       </element>
       <element uuid="a3f00264-6824-45e6-aef5-05000818afcb" manual="true">
         <element uuid="7f04cd1f-2beb-49cd-a580-ab18086b0e45" manual="true" dockArea="right">
