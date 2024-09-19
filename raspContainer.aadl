@@ -1,6 +1,7 @@
 package raspContainer
 public
 	with interSystemCom;
+	with Data_Model;
 	
 	system raspberryContainer
 		features
@@ -10,13 +11,14 @@ public
 	
 	system implementation RaspberryContainer.impl
 		subcomponents
-			telemetry: process TelemetryProcess.server;	
-			health_and_recorder: process HealthMonitorAndDataRecorder.impl;
 			cpu: processor Raspberry.impl;
 			navio2: device Navio2.impl;
 			ground_station: device GroundStation.impl;
+			com_device: device CommunicationDevice.impl;
 			communication_interface: process CommunicationInterface.impl;
 			sensor_driver: process SensorDriver.impl;
+			telemetry: process TelemetryProcess.server;	
+			health_and_recorder: process HealthMonitorAndDataRecorder.impl;
 			
 		connections
 			c1: port navio2.sensors_out -> sensor_driver.navio2_sensor_in;
@@ -30,9 +32,13 @@ public
 			c9: port ground_station.commands_out -> telemetry.ground_commands_in;
 			c10: port telemetry.telemetry_out -> ground_station.telemetry_in;
 			c11: port communication_interface.telemetry_out -> telemetry.telemetry_external_in;
-			c12: bus access com_bus -> cpu.com_bus;
---		properties
---			Actual_Processor_Binding => (reference (cpu)) applies to (telemetry_server);
+			c12: bus access com_bus <-> cpu.com_bus;
+			c13: bus access com_bus <-> com_device.com_bus;
+			c14: port com_device.com_out -> communication_interface.com_in;
+			c15: port communication_interface.com_out -> com_device.com_in;
+			
+		properties
+			Actual_Processor_Binding => (reference (cpu)) applies to telemetry, communication_interface, sensor_driver, health_and_recorder;
 	end raspberryContainer.impl;
 
 
@@ -45,24 +51,38 @@ public
 	
 	processor implementation Raspberry.impl
 		subcomponents
-			ram: memory RAM;
+			ram: memory RAM.rasp;
 	end Raspberry.impl;
 	
 	memory RAM
 	end RAM;
 	
+	memory implementation RAM.rasp
+		properties
+    		Memory_Size => 1 GByte;
+	end RAM.rasp;
+	
 	------------------- PROCESSES -------------------
 	
 	process TelemetryProcess
 		features
-			telemetry_external_in: in data port TelemetryData.impl;
-			telemetry_sensor_in: in data port SensorData.impl;
+			telemetry_external_in: in data port;
+			telemetry_sensor_in: in data port;
 			ground_commands_out: out event port;
 			ground_commands_in: in event port;
-			telemetry_out: out data port TelemetryData.impl;
+			telemetry_out: out data port;
 	end TelemetryProcess;
 	
 	process implementation TelemetryProcess.server
+		subcomponents
+			telemetry_thread: thread TelemetryThread.impl;
+			commands_thread: thread CommandsThread.impl;
+		connections
+			c1: port telemetry_external_in -> telemetry_thread.telemetry_in;
+			c2: port telemetry_sensor_in -> telemetry_thread.sensor_in;
+			c3: port telemetry_thread.telemetry_out -> telemetry_out;
+			c4: port ground_commands_in -> commands_thread.commands_in;
+			c5: port commands_thread.commands_out -> ground_commands_out;
 	end TelemetryProcess.server;
 	
 	process HealthMonitorAndDataRecorder 
@@ -89,27 +109,51 @@ public
 			record_out: out data port RecordData.impl;
 			sensor_in: in data port SensorData.impl;
 			ground_commands_in: in event port;
+			com_out: out data port;
+			com_in: in data port;
 	end CommunicationInterface;
 	
 	process implementation CommunicationInterface.impl
+		subcomponents
+			sensor_com: thread SensorCom.com;
+			telemetry_and_commands: thread TelemetryCommands.impl;
+			external_data_com: thread ExternalDataCom.impl;
+		connections
+			c1: port com_in -> telemetry_and_commands.external_telemetry_in;
+			c2: port com_in -> external_data_com.data_in;
+			c3: port sensor_com.sensor_out -> com_out;
+			c4: port telemetry_and_commands.ground_commands_out -> com_out;
+			c5: port telemetry_and_commands.telemetry_out -> telemetry_out;
+			c6: port ground_commands_in -> telemetry_and_commands.ground_commands_in;
+			c7: port external_data_com.data_out -> record_out;
+			c8: port sensor_in -> sensor_com.sensor_in;
 	end CommunicationInterface.impl;
 	
 	process SensorDriver
 		features
-			sensor_telemetry_out: out data port SensorData.impl;
-			sensor_communication_out: out data port SensorData.impl;
-			sensor_record_out: out data port SensorData.impl;
-			navio2_sensor_in: in data port NavioData.impl;
+			sensor_telemetry_out: out data port;
+			sensor_communication_out: out data port;
+			sensor_record_out: out data port;
+			navio2_sensor_in: in data port SensorData.impl;
 	end SensorDriver;
 	
 	process implementation SensorDriver.impl
+		subcomponents
+			sensor_external: thread SensorCom.sensor;
+			sensor_telemetry_recorder: thread SensorTelemetryRecorder.impl;
+		connections
+			c1: port navio2_sensor_in -> sensor_external.sensor_in;
+			c2: port navio2_sensor_in -> sensor_telemetry_recorder.sensor_in;
+			c3: port sensor_external.sensor_out -> sensor_communication_out;
+			c4: port sensor_telemetry_recorder.sensor_out -> sensor_record_out;
+			c5: port sensor_telemetry_recorder.sensor_out -> sensor_telemetry_out;
 	end SensorDriver.impl;
 	
 	
 	------------- DEVICES -------------
 	device Navio2
 		features
-			sensors_out: out data port NavioData.impl;
+			sensors_out: out data port SensorData.impl;
 	end Navio2;
 	device implementation Navio2.impl
 	end Navio2.impl;
@@ -121,6 +165,15 @@ public
 	end GroundStation;
 	device implementation GroundStation.impl
 	end GroundStation.impl;
+	
+	device CommunicationDevice
+		features
+			com_bus: requires bus access interSystemCom::communicationInterfaceBus.impl;
+			com_out: out data port;
+			com_in: in data port;
+	end CommunicationDevice;
+	device implementation CommunicationDevice.impl
+	end CommunicationDevice.impl;
 	
 	------------- THREADS -------------	
 	thread DataRecorder
@@ -137,7 +190,60 @@ public
 	end HealthMonitor;
 	thread implementation HealthMonitor.impl
 	end HealthMonitor.impl;
-	------------------------------------
+	
+	thread SensorCom
+		features
+			sensor_in: in data port SensorData.impl;
+			sensor_out: out data port;
+	end SensorCom;
+	thread implementation SensorCom.com -- Execution every 6ms
+	end SensorCom.com;
+	thread implementation SensorCom.sensor
+	end SensorCom.sensor;
+	
+	thread TelemetryCommands
+		features
+			external_telemetry_in: in data port;
+			telemetry_out: out data port TelemetryData.impl;
+			ground_commands_in: in event port;
+			ground_commands_out: out data port;
+	end TelemetryCommands;
+	thread implementation TelemetryCommands.impl -- Execution every 500ms
+	end TelemetryCommands.impl;
+	
+	thread ExternalDataCom
+		features
+			data_in: in data port;
+			data_out: out data port RecordData.impl;
+	end ExternalDataCom;
+	thread implementation ExternalDataCom.impl -- Execution every 500ms
+	end ExternalDataCom.impl;
+	
+	thread SensorTelemetryRecorder
+		features
+			sensor_in: in data port SensorData.impl;
+			sensor_out: out data port;
+	end SensorTelemetryRecorder;
+	thread implementation SensorTelemetryRecorder.impl
+	end SensorTelemetryRecorder.impl;
+	
+	thread TelemetryThread
+		features
+			telemetry_in: in data port;
+			sensor_in: in data port;
+			telemetry_out: out data port;
+	end TelemetryThread;
+	thread implementation TelemetryThread.impl
+	end TelemetryThread.impl;
+	
+	thread CommandsThread
+		features
+			commands_in: in event port;
+			commands_out: out event port;
+	end CommandsThread;
+	thread implementation CommandsThread.impl
+	end CommandsThread.impl;
+    ------------------------------------
 	
 	------------- ALL DATA -------------
 	data HealthMessages
@@ -163,12 +269,6 @@ public
 	
 	data implementation sensorData.impl
 	end sensorData.impl;
-	
-	data navioData
-	end navioData;
-	
-	data implementation navioData.impl
-	end navioData.impl;
 	------------------------------------
 
 end raspContainer;
