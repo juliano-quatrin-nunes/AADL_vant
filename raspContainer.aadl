@@ -12,9 +12,11 @@ public
 	system implementation RaspberryContainer.impl
 		subcomponents
 			cpu: processor Raspberry.impl;
+			
 			navio2: device Navio2.impl;
 			ground_station: device GroundStation.impl;
 			com_device: device CommunicationDevice.impl;
+			
 			communication_interface: process CommunicationInterface.impl;
 			sensor_driver: process SensorDriver.impl;
 			telemetry: process TelemetryProcess.server;	
@@ -139,14 +141,20 @@ public
 	
 	process implementation SensorDriver.impl
 		subcomponents
-			sensor_external: thread SensorCom.sensor;
-			sensor_telemetry_recorder: thread SensorTelemetryRecorder.impl;
-		connections
-			c1: port navio2_sensor_in -> sensor_external.sensor_in;
-			c2: port navio2_sensor_in -> sensor_telemetry_recorder.sensor_in;
-			c3: port sensor_external.sensor_out -> sensor_communication_out;
-			c4: port sensor_telemetry_recorder.sensor_out -> sensor_record_out;
-			c5: port sensor_telemetry_recorder.sensor_out -> sensor_telemetry_out;
+			process_data: thread Driver_data_proc.impl;
+			--sensor_external: thread SensorCom.sensor;
+			--sensor_telemetry_recorder: thread SensorTelemetryRecorder.impl;
+		connections			
+			--c1: port navio2_sensor_in -> sensor_external.sensor_in;
+			--c2: port navio2_sensor_in -> sensor_telemetry_recorder.sensor_in;
+			--c3: port sensor_external.sensor_out -> sensor_communication_out;
+			--c4: port sensor_telemetry_recorder.sensor_out -> sensor_record_out;
+			--c5: port sensor_telemetry_recorder.sensor_out -> sensor_telemetry_out;
+			
+			c6: port navio2_sensor_in -> process_data.rawData_in;
+			c7: port process_data.procData_out -> sensor_communication_out;
+			c8: port process_data.procData_out -> sensor_record_out;
+			c9: port process_data.procData_out -> sensor_telemetry_out;
 	end SensorDriver.impl;
 	
 	
@@ -177,49 +185,116 @@ public
 	
 	------------- THREADS -------------	
 	thread DataRecorder
+	-- Records sensor data and other relevant info in the memory of the board
+	-- Does it record on the RAM or an external memory (that would survive a loss of power)?
 		features
 			sensor_record: in data port SensorData.impl;
 			com_record: in data port RecordData.impl;
 	end DataRecorder;
 	thread implementation DataRecorder.impl
+		properties
+			dispatch_protocol => periodic;
+			period => 500 ms; 
+			deadline => 500 ms; --Same as period?
+			priority => 2;
+			compute_execution_time => 10 ms .. 20 ms;
+			dispatch_offset => 2 ms;
 	end DataRecorder.impl;
 	
 	thread HealthMonitor
+	-- Checks if the Raspberry Pi and its components work properly
+	-- Not very fleshed out
 		features
 			health_out: out event port;
 	end HealthMonitor;
 	thread implementation HealthMonitor.impl
+		properties
+			dispatch_protocol => periodic;
+			period => 100 ms; --Should it have a higher frequency?
+			deadline => 100 ms; --Same as period?
+			priority => 4;
+			compute_execution_time => 5 ms .. 10 ms;
+			dispatch_offset => 1 ms;
 	end HealthMonitor.impl;
+	
+	thread Driver_data_proc 
+	-- Processes raw data sent from the sensors into readable data for the various other components
+	-- Could be separated into different threads for each different type of sensor
+		features
+			rawData_in: in data port SensorData.impl;
+			procData_out: out data port;
+	end Driver_data_proc;
+	thread implementation Driver_data_proc.impl
+		properties
+			dispatch_protocol => periodic;
+			period => 3 ms; 
+			deadline => 3 ms; --Same as period?
+			priority => 5;
+			compute_execution_time => 500 us .. 1 ms;
+			dispatch_offset => 50 us; -- Non-zero start time (should be lower? -> RAM write speed)
+	end Driver_data_proc.impl;
 	
 	thread SensorCom
 		features
 			sensor_in: in data port SensorData.impl;
 			sensor_out: out data port;
 	end SensorCom;
-	thread implementation SensorCom.com -- Execution every 6ms
+	thread implementation SensorCom.com -- Thread to communicate sensor data to the bus SHOULD BE REWORKED
+	properties
+		dispatch_protocol => periodic;
+		period => 3 ms; 
+		deadline => 3 ms; --Same as period?
+		priority => 5;
+		compute_execution_time => 500 us .. 1 ms;
+		dispatch_offset => 50 us; -- Non-zero start time
 	end SensorCom.com;
-	thread implementation SensorCom.sensor
-	end SensorCom.sensor;
+	thread implementation SensorCom.sensor	-- Thread to fetch sensor data from the sensors (devices)
+	properties
+		dispatch_protocol => periodic;
+		period => 3 ms; 
+		deadline => 3 ms; --Same as period?
+		priority => 5;
+		compute_execution_time => 500 us .. 1 ms;
+		dispatch_offset => 50 us; -- Non-zero start time
+	end SensorCom.sensor; -- Total combined deadline is 6ms
 	
 	thread TelemetryCommands
+	-- Fetches telemetry data from the other components of the UAV via the bus connection to send them to the ground station
+	-- AND
+	-- Gets Ground Station commands to send them to the other components of the UAV via the bus connection
 		features
 			external_telemetry_in: in data port;
 			telemetry_out: out data port TelemetryData.impl;
 			ground_commands_in: in event port;
 			ground_commands_out: out data port;
 	end TelemetryCommands;
-	thread implementation TelemetryCommands.impl -- Execution every 500ms
+	thread implementation TelemetryCommands.impl -- Should be as fast as the thread that gets the GS commands
+		properties
+			dispatch_protocol => periodic;
+			period => 200 ms;
+			deadline => 200 ms; --Same as period?
+			priority => 3;
+			compute_execution_time => 10 ms .. 20 ms;
+			dispatch_offset => 2 ms; -- Non-zero start time
 	end TelemetryCommands.impl;
 	
 	thread ExternalDataCom
+	-- Gets telemetry data from other components of the UAV via the bus connection
 		features
 			data_in: in data port;
 			data_out: out data port RecordData.impl;
 	end ExternalDataCom;
 	thread implementation ExternalDataCom.impl -- Execution every 500ms
+		properties
+			dispatch_protocol => periodic;
+			period => 500 ms; -- Should it be faster than or same as the Recorder?
+			deadline => 500 ms; --Same as period?
+			priority => 2;
+			compute_execution_time => 10 ms .. 20 ms;
+			dispatch_offset => 2 ms;
 	end ExternalDataCom.impl;
 	
-	thread SensorTelemetryRecorder
+	thread SensorTelemetryRecorder -- NOT USED ANYMORE
 		features
 			sensor_in: in data port SensorData.impl;
 			sensor_out: out data port;
@@ -228,45 +303,58 @@ public
 	end SensorTelemetryRecorder.impl;
 	
 	thread TelemetryThread
+	-- Bundles sensor data with data from other systems of the UAV to send to the ground station
 		features
 			telemetry_in: in data port;
 			sensor_in: in data port;
 			telemetry_out: out data port;
 	end TelemetryThread;
 	thread implementation TelemetryThread.impl
+		properties
+			dispatch_protocol => periodic;
+			period => 500 ms; -- Should it have a higher frequency?
+			deadline => 500 ms; --Same as period?
+			priority => 2;
+			compute_execution_time => 10 ms .. 20 ms;
+			dispatch_offset => 2 ms; -- Non-zero start time
 	end TelemetryThread.impl;
 	
 	thread CommandsThread
+	-- Listens for commands from the ground station and broadcasts them to the Communication Interface
+	-- Listens periodically?
 		features
 			commands_in: in event port;
 			commands_out: out event port;
 	end CommandsThread;
 	thread implementation CommandsThread.impl
+		properties
+			dispatch_protocol => periodic;
+			period => 200 ms;
+			deadline => 200 ms; --Same as period?
+			priority => 3;
+			compute_execution_time => 5 ms .. 20 ms;
+			dispatch_offset => 500 us; -- Non-zero start time
 	end CommandsThread.impl;
     ------------------------------------
 	
 	------------- ALL DATA -------------
 	data HealthMessages
 	end HealthMessages;
-	
 	data implementation HealthMessages.impl
 	end HealthMessages.impl;
 	
 	data TelemetryData
 	end TelemetryData;
-	
 	data implementation telemetryData.impl
 	end telemetryData.impl;
 	
 	data recordData
 	end recordData;
-	
 	data implementation recordData.impl
 	end recordData.impl;
 	
 	data sensorData
 	end sensorData;
-	
 	data implementation sensorData.impl
 	end sensorData.impl;
 	------------------------------------
