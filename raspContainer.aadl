@@ -1,12 +1,11 @@
 package raspContainer
 public
 	with interSystemCom;
-	with Data_Model;
+	with SEI;
 	
 	system raspberryContainer
 		features
 			com_bus: requires bus access interSystemCom::communicationInterfaceBus.impl;
-			
 	end raspberryContainer;
 	
 	system implementation RaspberryContainer.impl
@@ -38,7 +37,10 @@ public
 			c13: bus access com_bus <-> com_device.com_bus;
 			c14: port com_device.com_out -> communication_interface.com_in;
 			c15: port communication_interface.com_out -> com_device.com_in;
-			
+		
+		flows
+			flow_1: end to end flow navio2.flow1 -> c1 -> sensor_driver.flow1 -> c4 -> communication_interface.flow1 -> c15 -> com_device.flow1;
+		
 		properties
 			Actual_Processor_Binding => (reference (cpu)) applies to telemetry, communication_interface, sensor_driver, health_and_recorder;
 	end raspberryContainer.impl;
@@ -49,6 +51,7 @@ public
 			com_bus: requires bus access interSystemCom::communicationInterfaceBus.impl;
 		properties
 			Scheduling_Protocol => (EDF); 
+			SEI::MIPSCapacity => 1.0 MIPS;
 	end Raspberry;
 	
 	processor implementation Raspberry.impl
@@ -113,6 +116,8 @@ public
 			ground_commands_in: in event port;
 			com_out: out data port;
 			com_in: in data port;
+		flows
+			flow1: flow path sensor_in -> com_out;
 	end CommunicationInterface;
 	
 	process implementation CommunicationInterface.impl
@@ -129,6 +134,8 @@ public
 			c6: port ground_commands_in -> telemetry_and_commands.ground_commands_in;
 			c7: port external_data_com.data_out -> record_out;
 			c8: port sensor_in -> sensor_com.sensor_in;
+		flows
+			flow1: flow path sensor_in -> c8 -> sensor_com.flow_sensor -> c3 -> com_out;
 	end CommunicationInterface.impl;
 	
 	process SensorDriver
@@ -137,6 +144,8 @@ public
 			sensor_communication_out: out data port;
 			sensor_record_out: out data port;
 			navio2_sensor_in: in data port SensorData.impl;
+		flows
+			flow1: flow path navio2_sensor_in -> sensor_communication_out;
 	end SensorDriver;
 	
 	process implementation SensorDriver.impl
@@ -155,6 +164,9 @@ public
 			c7: port process_data.procData_out -> sensor_communication_out;
 			c8: port process_data.procData_out -> sensor_record_out;
 			c9: port process_data.procData_out -> sensor_telemetry_out;
+		flows
+			flow1: flow path navio2_sensor_in -> c6 -> process_data.flow1 -> c7 -> sensor_communication_out;
+		
 	end SensorDriver.impl;
 	
 	
@@ -162,6 +174,8 @@ public
 	device Navio2
 		features
 			sensors_out: out data port SensorData.impl;
+		flows
+			flow1: flow source sensors_out {Latency => 0ns .. 16666ns;};
 	end Navio2;
 	device implementation Navio2.impl
 	end Navio2.impl;
@@ -179,6 +193,8 @@ public
 			com_bus: requires bus access interSystemCom::communicationInterfaceBus.impl;
 			com_out: out data port;
 			com_in: in data port;
+		flows
+			flow1: flow sink com_in {Latency => 0ns .. 16666ns;};
 	end CommunicationDevice;
 	device implementation CommunicationDevice.impl
 	end CommunicationDevice.impl;
@@ -223,6 +239,8 @@ public
 		features
 			rawData_in: in data port SensorData.impl;
 			procData_out: out data port;
+		flows
+			flow1: flow path rawData_in -> procData_out;
 	end Driver_data_proc;
 	thread implementation Driver_data_proc.impl
 		properties
@@ -230,7 +248,7 @@ public
 			period => 3 ms; 
 			deadline => 3 ms; --Same as period?
 			priority => 5;
-			compute_execution_time => 500 us .. 1 ms;
+			compute_execution_time => 250 us .. 500 us;
 			dispatch_offset => 50 us; -- Non-zero start time (should be lower? -> RAM write speed)
 	end Driver_data_proc.impl;
 	
@@ -238,6 +256,8 @@ public
 		features
 			sensor_in: in data port SensorData.impl;
 			sensor_out: out data port;
+		flows 
+			flow_sensor: flow path sensor_in -> sensor_out;	
 	end SensorCom;
 	thread implementation SensorCom.com -- Thread to communicate sensor data to the bus SHOULD BE REWORKED
 	properties
@@ -245,7 +265,7 @@ public
 		period => 3 ms; 
 		deadline => 3 ms; --Same as period?
 		priority => 5;
-		compute_execution_time => 500 us .. 1 ms;
+		compute_execution_time => 250 us .. 500 us;
 		dispatch_offset => 50 us; -- Non-zero start time
 	end SensorCom.com;
 	thread implementation SensorCom.sensor	-- Thread to fetch sensor data from the sensors (devices)
@@ -254,7 +274,7 @@ public
 		period => 3 ms; 
 		deadline => 3 ms; --Same as period?
 		priority => 5;
-		compute_execution_time => 500 us .. 1 ms;
+		compute_execution_time => 250 us .. 500 us;
 		dispatch_offset => 50 us; -- Non-zero start time
 	end SensorCom.sensor; -- Total combined deadline is 6ms
 	

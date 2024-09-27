@@ -52,11 +52,11 @@
         <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Timing_Properties.aadl#Timing_Properties.Compute_Execution_Time"/>
         <ownedValue>
           <ownedValue xsi:type="aadl2:RangeValue">
-            <minimum xsi:type="aadl2:IntegerLiteral" value="500">
+            <minimum xsi:type="aadl2:IntegerLiteral" value="250">
               <unit href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.16/@ownedLiteral.2"/>
             </minimum>
-            <maximum xsi:type="aadl2:IntegerLiteral" value="1">
-              <unit href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.16/@ownedLiteral.3"/>
+            <maximum xsi:type="aadl2:IntegerLiteral" value="500">
+              <unit href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.16/@ownedLiteral.2"/>
             </maximum>
           </ownedValue>
         </ownedValue>
@@ -77,10 +77,16 @@
       <featureInstance name="procData_out" direction="out">
         <feature xsi:type="aadl2:DataPort" href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.24/@ownedDataPort.1"/>
       </featureInstance>
+      <flowSpecification name="flow1" source="/0/@componentInstance.0/@featureInstance.0" destination="/0/@componentInstance.0/@featureInstance.1">
+        <flowSpecification href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.24/@ownedFlowSpecification.0"/>
+      </flowSpecification>
       <subcomponent xsi:type="aadl2:ThreadSubcomponent" href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.13/@ownedThreadSubcomponent.0"/>
       <index>0</index>
       <classifier xsi:type="aadl2:ThreadImplementation" href="../raspContainer.aadl#raspContainer.Driver_data_proc.impl"/>
     </componentInstance>
+    <flowSpecification name="flow1" source="/0/@featureInstance.3" destination="/0/@featureInstance.1">
+      <flowSpecification href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.12/@ownedFlowSpecification.0"/>
+    </flowSpecification>
     <connectionInstance name="navio2_sensor_in -> process_data.rawData_in" kind="portConnection" destination="/0/@componentInstance.0/@featureInstance.0" source="/0/@featureInstance.3">
       <connectionReference context="/0" source="/0/@featureInstance.3" destination="/0/@componentInstance.0/@featureInstance.0">
         <connection xsi:type="aadl2:PortConnection" href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.13/@ownedPortConnection.0"/>

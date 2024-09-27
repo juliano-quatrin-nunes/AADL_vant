@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<instance:SystemInstance xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aadl2="http://aadl.info/AADL/2.0" xmlns:instance="http://aadl.info/AADL/2.0/instance" name="healthMonitor_impl_Instance" category="thread">
-  <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
-    <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Timing_Properties.aadl#Timing_Properties.Period"/>
-    <ownedValue>
-      <ownedValue xsi:type="aadl2:IntegerLiteral" value="20">
-        <unit href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.16/@ownedLiteral.3"/>
-      </ownedValue>
-    </ownedValue>
-    <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.14/@ownedPropertyAssociation.0"/>
-  </ownedPropertyAssociation>
+<instance:SystemInstance xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aadl2="http://aadl.info/AADL/2.0" xmlns:instance="http://aadl.info/AADL/2.0/instance" name="HealthMonitor_impl_Instance" category="thread">
   <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
     <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Thread_Properties.aadl#Thread_Properties.Dispatch_Protocol"/>
     <ownedValue>
@@ -16,29 +7,38 @@
         <namedValue xsi:type="aadl2:EnumerationLiteral" href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.3/@ownedLiteral.0"/>
       </ownedValue>
     </ownedValue>
-    <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.14/@ownedPropertyAssociation.1"/>
+    <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.23/@ownedPropertyAssociation.0"/>
+  </ownedPropertyAssociation>
+  <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+    <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Timing_Properties.aadl#Timing_Properties.Period"/>
+    <ownedValue>
+      <ownedValue xsi:type="aadl2:IntegerLiteral" value="100">
+        <unit href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.16/@ownedLiteral.3"/>
+      </ownedValue>
+    </ownedValue>
+    <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.23/@ownedPropertyAssociation.1"/>
   </ownedPropertyAssociation>
   <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
     <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Timing_Properties.aadl#Timing_Properties.Deadline"/>
     <ownedValue>
-      <ownedValue xsi:type="aadl2:IntegerLiteral" value="20">
+      <ownedValue xsi:type="aadl2:IntegerLiteral" value="100">
         <unit href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.16/@ownedLiteral.3"/>
       </ownedValue>
     </ownedValue>
-    <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.14/@ownedPropertyAssociation.2"/>
+    <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.23/@ownedPropertyAssociation.2"/>
   </ownedPropertyAssociation>
   <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
     <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Thread_Properties.aadl#Thread_Properties.Priority"/>
     <ownedValue>
-      <ownedValue xsi:type="aadl2:IntegerLiteral" value="6"/>
+      <ownedValue xsi:type="aadl2:IntegerLiteral" value="4"/>
     </ownedValue>
-    <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.14/@ownedPropertyAssociation.3"/>
+    <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.23/@ownedPropertyAssociation.3"/>
   </ownedPropertyAssociation>
   <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
     <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Timing_Properties.aadl#Timing_Properties.Compute_Execution_Time"/>
     <ownedValue>
       <ownedValue xsi:type="aadl2:RangeValue">
-        <minimum xsi:type="aadl2:IntegerLiteral" value="1">
+        <minimum xsi:type="aadl2:IntegerLiteral" value="5">
           <unit href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.16/@ownedLiteral.3"/>
         </minimum>
         <maximum xsi:type="aadl2:IntegerLiteral" value="10">
@@ -46,9 +46,21 @@
         </maximum>
       </ownedValue>
     </ownedValue>
-    <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.14/@ownedPropertyAssociation.4"/>
+    <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.23/@ownedPropertyAssociation.4"/>
   </ownedPropertyAssociation>
-  <classifier xsi:type="aadl2:ThreadImplementation" href="../raspContainer.aadl#raspContainer.healthMonitor.impl"/>
+  <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+    <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Timing_Properties.aadl#Timing_Properties.Dispatch_Offset"/>
+    <ownedValue>
+      <ownedValue xsi:type="aadl2:IntegerLiteral" value="1">
+        <unit href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.16/@ownedLiteral.3"/>
+      </ownedValue>
+    </ownedValue>
+    <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.23/@ownedPropertyAssociation.5"/>
+  </ownedPropertyAssociation>
+  <featureInstance name="health_out" category="eventPort" direction="out">
+    <feature xsi:type="aadl2:EventPort" href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.22/@ownedEventPort.0"/>
+  </featureInstance>
+  <classifier xsi:type="aadl2:ThreadImplementation" href="../raspContainer.aadl#raspContainer.HealthMonitor.impl"/>
   <systemOperationMode name="No Modes"/>
-  <componentImplementation xsi:type="aadl2:ThreadImplementation" href="../raspContainer.aadl#raspContainer.healthMonitor.impl"/>
+  <componentImplementation xsi:type="aadl2:ThreadImplementation" href="../raspContainer.aadl#raspContainer.HealthMonitor.impl"/>
 </instance:SystemInstance>
