@@ -1,14 +1,7 @@
 Test scheduability Report
 
 Processor Utilization/Scheduling Results
-ERROR:  cpu: Processor RaspberryContainer_impl_Instance.cpu is not schedulable with utilization 108,7%
+ERROR:  cpu: Processor raspberryContainer_impl_Instance.cpu has threads and is not schedulable because it has no MIPS capacity
 
 Thread binding report
-thread communication_interface.sensor_com(0,333 MIPS) ==> processor cpu(1,00MIPS) Utilization 33,3%
-thread communication_interface.telemetry_and_commands(0,100 MIPS) ==> processor cpu(1,00MIPS) Utilization 10,0%
-thread communication_interface.external_data_com(0,040 MIPS) ==> processor cpu(1,00MIPS) Utilization 4,0%
-thread sensor_driver.process_data(0,333 MIPS) ==> processor cpu(1,00MIPS) Utilization 33,3%
-thread telemetry.telemetry_thread(0,040 MIPS) ==> processor cpu(1,00MIPS) Utilization 4,0%
-thread telemetry.commands_thread(0,100 MIPS) ==> processor cpu(1,00MIPS) Utilization 10,0%
-thread health_and_recorder.health_thread(0,100 MIPS) ==> processor cpu(1,00MIPS) Utilization 10,0%
-thread health_and_recorder.data_recorder(0,040 MIPS) ==> processor cpu(1,00MIPS) Utilization 4,0%
+thread main.telemetry(0,000 MIPS) ==> processor cpu(0,000MIPS) No CPU capacity
