@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aadl2="http://aadl.info/AADL/2.0" xmlns:instance="http://aadl.info/AADL/2.0/instance">
+  <instance:SystemInstance name="CommunicationDevice_impl_Instance" category="device">
+    <featureInstance name="com_out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.18/@ownedDataPort.0"/>
+    </featureInstance>
+    <featureInstance name="com_in">
+      <feature xsi:type="aadl2:DataPort" href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.18/@ownedDataPort.1"/>
+    </featureInstance>
+    <featureInstance name="com_bus" category="busAccess" type="/1">
+      <feature xsi:type="aadl2:BusAccess" href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.18/@ownedBusAccess.0"/>
+    </featureInstance>
+    <flowSpecification name="flow1" source="/0/@featureInstance.1">
+      <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
+        <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Communication_Properties.aadl#Communication_Properties.Latency"/>
+        <ownedValue>
+          <ownedValue xsi:type="aadl2:RangeValue">
+            <minimum xsi:type="aadl2:IntegerLiteral">
+              <unit href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.16/@ownedLiteral.1"/>
+            </minimum>
+            <maximum xsi:type="aadl2:IntegerLiteral" value="16666">
+              <unit href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.16/@ownedLiteral.1"/>
+            </maximum>
+          </ownedValue>
+        </ownedValue>
+        <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.18/@ownedFlowSpecification.0/@ownedPropertyAssociation.0"/>
+      </ownedPropertyAssociation>
+      <flowSpecification href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.18/@ownedFlowSpecification.0"/>
+    </flowSpecification>
+    <classifier xsi:type="aadl2:DeviceImplementation" href="../raspContainer.aadl#raspContainer.CommunicationDevice.impl"/>
+    <systemOperationMode name="No Modes"/>
+    <componentImplementation xsi:type="aadl2:DeviceImplementation" href="../raspContainer.aadl#raspContainer.CommunicationDevice.impl"/>
+  </instance:SystemInstance>
+  <instance:ComponentInstance name="interSystemCom::communicationInterfaceBus.impl" category="bus">
+    <classifier xsi:type="aadl2:BusImplementation" href="../interSystemCom.aadl#interSystemCom.communicationInterfaceBus.impl"/>
+  </instance:ComponentInstance>
+</xmi:XMI>

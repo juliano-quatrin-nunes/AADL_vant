@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aadl2="http://aadl.info/AADL/2.0" xmlns:instance="http://aadl.info/AADL/2.0/instance">
-  <instance:SystemInstance name="DataRecorder_impl_Instance" category="thread">
+  <instance:SystemInstance name="TelemetryCommands_impl_Instance" category="thread">
     <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
       <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Thread_Properties.aadl#Thread_Properties.Dispatch_Protocol"/>
       <ownedValue>
@@ -8,32 +8,32 @@
           <namedValue xsi:type="aadl2:EnumerationLiteral" href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.3/@ownedLiteral.0"/>
         </ownedValue>
       </ownedValue>
-      <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.21/@ownedPropertyAssociation.0"/>
+      <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.30/@ownedPropertyAssociation.0"/>
     </ownedPropertyAssociation>
     <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
       <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Timing_Properties.aadl#Timing_Properties.Period"/>
       <ownedValue>
-        <ownedValue xsi:type="aadl2:IntegerLiteral" value="500">
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="200">
           <unit href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.16/@ownedLiteral.3"/>
         </ownedValue>
       </ownedValue>
-      <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.21/@ownedPropertyAssociation.1"/>
+      <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.30/@ownedPropertyAssociation.1"/>
     </ownedPropertyAssociation>
     <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
       <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Timing_Properties.aadl#Timing_Properties.Deadline"/>
       <ownedValue>
-        <ownedValue xsi:type="aadl2:IntegerLiteral" value="500">
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="200">
           <unit href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.16/@ownedLiteral.3"/>
         </ownedValue>
       </ownedValue>
-      <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.21/@ownedPropertyAssociation.2"/>
+      <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.30/@ownedPropertyAssociation.2"/>
     </ownedPropertyAssociation>
     <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
       <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Thread_Properties.aadl#Thread_Properties.Priority"/>
       <ownedValue>
-        <ownedValue xsi:type="aadl2:IntegerLiteral" value="2"/>
+        <ownedValue xsi:type="aadl2:IntegerLiteral" value="3"/>
       </ownedValue>
-      <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.21/@ownedPropertyAssociation.3"/>
+      <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.30/@ownedPropertyAssociation.3"/>
     </ownedPropertyAssociation>
     <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
       <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Timing_Properties.aadl#Timing_Properties.Compute_Execution_Time"/>
@@ -47,7 +47,7 @@
           </maximum>
         </ownedValue>
       </ownedValue>
-      <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.21/@ownedPropertyAssociation.4"/>
+      <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.30/@ownedPropertyAssociation.4"/>
     </ownedPropertyAssociation>
     <ownedPropertyAssociation xsi:type="instance:PropertyAssociationInstance">
       <property href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/Timing_Properties.aadl#Timing_Properties.Dispatch_Offset"/>
@@ -56,22 +56,25 @@
           <unit href="platform:/plugin/org.osate.aadl2.contrib/resources/properties/Predeclared_Property_Sets/AADL_Project.aadl#/0/@ownedPropertyType.16/@ownedLiteral.3"/>
         </ownedValue>
       </ownedValue>
-      <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.21/@ownedPropertyAssociation.5"/>
+      <propertyAssociation href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.30/@ownedPropertyAssociation.5"/>
     </ownedPropertyAssociation>
-    <featureInstance name="sensor_record" type="/1">
-      <feature xsi:type="aadl2:DataPort" href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.20/@ownedDataPort.0"/>
+    <featureInstance name="external_telemetry_in">
+      <feature xsi:type="aadl2:DataPort" href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.29/@ownedDataPort.0"/>
     </featureInstance>
-    <featureInstance name="com_record" type="/2">
-      <feature xsi:type="aadl2:DataPort" href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.20/@ownedDataPort.1"/>
+    <featureInstance name="telemetry_out" direction="out" type="/1">
+      <feature xsi:type="aadl2:DataPort" href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.29/@ownedDataPort.1"/>
     </featureInstance>
-    <classifier xsi:type="aadl2:ThreadImplementation" href="../raspContainer.aadl#raspContainer.DataRecorder.impl"/>
+    <featureInstance name="ground_commands_out" direction="out">
+      <feature xsi:type="aadl2:DataPort" href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.29/@ownedDataPort.2"/>
+    </featureInstance>
+    <featureInstance name="ground_commands_in" category="eventPort">
+      <feature xsi:type="aadl2:EventPort" href="../raspContainer.aadl#/0/@ownedPublicSection/@ownedClassifier.29/@ownedEventPort.0"/>
+    </featureInstance>
+    <classifier xsi:type="aadl2:ThreadImplementation" href="../raspContainer.aadl#raspContainer.TelemetryCommands.impl"/>
     <systemOperationMode name="No Modes"/>
-    <componentImplementation xsi:type="aadl2:ThreadImplementation" href="../raspContainer.aadl#raspContainer.DataRecorder.impl"/>
+    <componentImplementation xsi:type="aadl2:ThreadImplementation" href="../raspContainer.aadl#raspContainer.TelemetryCommands.impl"/>
   </instance:SystemInstance>
-  <instance:ComponentInstance name="raspContainer::sensorData.impl" category="data">
-    <classifier xsi:type="aadl2:DataImplementation" href="../raspContainer.aadl#raspContainer.sensorData.impl"/>
-  </instance:ComponentInstance>
-  <instance:ComponentInstance name="raspContainer::recordData.impl" category="data">
-    <classifier xsi:type="aadl2:DataImplementation" href="../raspContainer.aadl#raspContainer.recordData.impl"/>
+  <instance:ComponentInstance name="raspContainer::telemetryData.impl" category="data">
+    <classifier xsi:type="aadl2:DataImplementation" href="../raspContainer.aadl#raspContainer.telemetryData.impl"/>
   </instance:ComponentInstance>
 </xmi:XMI>

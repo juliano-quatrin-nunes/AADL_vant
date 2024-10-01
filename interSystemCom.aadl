@@ -1,0 +1,9 @@
+package interSystemCom
+public
+	bus communicationInterfaceBus
+	end communicationInterfaceBus;
+	
+	bus implementation communicationInterfaceBus.impl
+	end communicationInterfaceBus.impl;
+	
+end interSystemCom;

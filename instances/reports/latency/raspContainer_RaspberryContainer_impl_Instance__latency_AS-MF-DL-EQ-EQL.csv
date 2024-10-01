@@ -1,0 +1,21 @@
+Latency analysis with preference settings: asynchronous system/major partition frame/worst case as deadline/best case as empty queue/queuing latency enabled
+
+"Latency results for end-to-end flow 'flow_1' of system 'RaspberryContainer.impl' "
+
+Result,Min Specified,Min Actual,Min Method,Max Specified,Max Actual,Max Method,Comments
+device navio2 (source flow1),0.0ms,0.0ms,no sampling/queuing latency,0.016666ms,0.016666ms,specified
+connection navio2.sensors_out -> sensor_driver.process_data.rawData_in,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+thread sensor_driver.process_data (path flow1),0.0ms,0.0ms,sampling,0.0ms,3.0ms,sampling,Best case 0 ms worst case 3.0ms (period) sampling delay
+thread sensor_driver.process_data (path flow1),0.0ms,0.25ms,processing time,0.0ms,3.0ms,deadline
+connection sensor_driver.process_data.procData_out -> communication_interface.sensor_com.sensor_in,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+thread communication_interface.sensor_com (path flow_sensor),0.0ms,0.0ms,sampling,0.0ms,0.0ms,sampling,Min: Best case: 0 ms sampling delay,Synchronous communication on same platform,Max: Worst case: Round up sampling delay to period 3.0ms
+thread communication_interface.sensor_com (path flow_sensor),0.0ms,0.25ms,processing time,0.0ms,3.0ms,deadline
+connection communication_interface.sensor_com.sensor_out -> com_device.com_in,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+device com_device (sink flow1),0.0ms,0.0ms,no sampling/queuing latency,0.016666ms,0.016666ms,specified
+Latency Total,0.0ms,0.5ms,,0.033ms,9.033ms
+Specified End To End Latency,,0.0ms,,,0.0ms
+End to end Latency Summary
+WARNING,Expected end to end latency is not specified
+
+
+

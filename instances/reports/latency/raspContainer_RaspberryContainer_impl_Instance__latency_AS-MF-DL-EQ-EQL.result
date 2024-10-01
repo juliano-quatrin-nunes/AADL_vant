@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="ASCII"?>
+<result:AnalysisResult xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:result="http://www.osate.org/result/Result" analysis="latency" message="AS-MF-DL-EQ-EQL">
+  <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0"/>
+  <parameters value="ACED0005737200116A6176612E6C616E672E426F6F6C65616ECD207280D59CFAEE0200015A000576616C7565787001"/>
+  <parameters value="ACED0005737200116A6176612E6C616E672E426F6F6C65616ECD207280D59CFAEE0200015A000576616C7565787001"/>
+  <parameters value="ACED0005737200116A6176612E6C616E672E426F6F6C65616ECD207280D59CFAEE0200015A000576616C7565787001"/>
+  <parameters value="ACED0005737200116A6176612E6C616E672E426F6F6C65616ECD207280D59CFAEE0200015A000576616C7565787001"/>
+  <parameters value="ACED0005737200116A6176612E6C616E672E426F6F6C65616ECD207280D59CFAEE0200015A000576616C7565787000"/>
+  <results message="Latency results for flow_1" resultType="SUCCESS">
+    <values xsi:type="result:StringValue" value=""/>
+    <values xsi:type="result:RealValue" value="0.5"/>
+    <values xsi:type="result:RealValue" value="9.033"/>
+    <values xsi:type="result:RealValue"/>
+    <values xsi:type="result:RealValue" value="0.033"/>
+    <values xsi:type="result:RealValue"/>
+    <values xsi:type="result:RealValue"/>
+    <diagnostics diagnosticType="WARNING" message="Expected end to end latency is not specified">
+      <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@endToEndFlow.0"/>
+    </diagnostics>
+    <subResults>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue" value="0.016666"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue" value="0.016666"/>
+      <values xsi:type="result:StringValue" value="no sampling/queuing latency"/>
+      <values xsi:type="result:StringValue" value="specified"/>
+      <values xsi:type="result:StringValue" value="source flow1"/>
+      <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@componentInstance.0"/>
+    </subResults>
+    <subResults>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:StringValue" value="no sampling/queuing latency"/>
+      <values xsi:type="result:StringValue" value="no sampling/queuing latency"/>
+      <values xsi:type="result:StringValue" value=""/>
+      <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@connectionInstance.2"/>
+    </subResults>
+    <subResults>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue" value="3.0"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:StringValue" value="sampling"/>
+      <values xsi:type="result:StringValue" value="sampling"/>
+      <values xsi:type="result:StringValue" value="path flow1"/>
+      <diagnostics diagnosticType="INFO" message="Best case 0 ms worst case 3.0ms (period) sampling delay">
+        <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@componentInstance.4/@componentInstance.0"/>
+      </diagnostics>
+      <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@componentInstance.4/@componentInstance.0"/>
+    </subResults>
+    <subResults>
+      <values xsi:type="result:RealValue" value="0.25"/>
+      <values xsi:type="result:RealValue" value="3.0"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:StringValue" value="processing time"/>
+      <values xsi:type="result:StringValue" value="deadline"/>
+      <values xsi:type="result:StringValue" value="path flow1"/>
+      <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@componentInstance.4/@componentInstance.0"/>
+    </subResults>
+    <subResults>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:StringValue" value="no sampling/queuing latency"/>
+      <values xsi:type="result:StringValue" value="no sampling/queuing latency"/>
+      <values xsi:type="result:StringValue" value=""/>
+      <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@connectionInstance.12"/>
+    </subResults>
+    <subResults>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:StringValue" value="sampling"/>
+      <values xsi:type="result:StringValue" value="sampling"/>
+      <values xsi:type="result:StringValue" value="path flow_sensor"/>
+      <diagnostics diagnosticType="INFO" message="Min: Best case: 0 ms sampling delay">
+        <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@componentInstance.3/@componentInstance.0"/>
+      </diagnostics>
+      <diagnostics diagnosticType="INFO" message="Synchronous communication on same platform">
+        <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@componentInstance.3/@componentInstance.0"/>
+      </diagnostics>
+      <diagnostics diagnosticType="INFO" message="Max: Worst case: Round up sampling delay to period 3.0ms">
+        <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@componentInstance.3/@componentInstance.0"/>
+      </diagnostics>
+      <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@componentInstance.3/@componentInstance.0"/>
+    </subResults>
+    <subResults>
+      <values xsi:type="result:RealValue" value="0.25"/>
+      <values xsi:type="result:RealValue" value="3.0"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:StringValue" value="processing time"/>
+      <values xsi:type="result:StringValue" value="deadline"/>
+      <values xsi:type="result:StringValue" value="path flow_sensor"/>
+      <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@componentInstance.3/@componentInstance.0"/>
+    </subResults>
+    <subResults>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:StringValue" value="no sampling/queuing latency"/>
+      <values xsi:type="result:StringValue" value="no sampling/queuing latency"/>
+      <values xsi:type="result:StringValue" value=""/>
+      <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@connectionInstance.8"/>
+    </subResults>
+    <subResults>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue" value="0.016666"/>
+      <values xsi:type="result:RealValue"/>
+      <values xsi:type="result:RealValue" value="0.016666"/>
+      <values xsi:type="result:StringValue" value="no sampling/queuing latency"/>
+      <values xsi:type="result:StringValue" value="specified"/>
+      <values xsi:type="result:StringValue" value="sink flow1"/>
+      <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@componentInstance.2"/>
+    </subResults>
+    <modelElement href="../../raspContainer_RaspberryContainer_impl_Instance.aaxl2#/0/@endToEndFlow.0"/>
+  </results>
+</result:AnalysisResult>
