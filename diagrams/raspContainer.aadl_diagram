@@ -234,6 +234,13 @@
           </bo>
           <position x="50.0" y="112.0"/>
         </element>
+        <element uuid="fc7ccd40-3147-42bf-8c01-f2db81aeff4a" manual="true">
+          <bo>
+            <seg>flow_specification</seg>
+            <seg>telemetry_flow</seg>
+          </bo>
+          <position x="50.0" y="172.0"/>
+        </element>
         <bo>
           <seg>subcomponent</seg>
           <seg>com_device</seg>
@@ -476,6 +483,12 @@
               <seg>commands_flow</seg>
             </bo>
           </element>
+          <element uuid="bc6532d1-7aba-4dbf-8422-fd0da822720e" manual="true">
+            <bo>
+              <seg>flow_specification</seg>
+              <seg>telemetry_flow</seg>
+            </bo>
+          </element>
           <bo>
             <seg>subcomponent</seg>
             <seg>telemetry_and_commands</seg>
@@ -534,6 +547,13 @@
             <seg>commands_flow</seg>
           </bo>
           <position x="137.1588592529297" y="52.0"/>
+        </element>
+        <element uuid="bc64b119-4a07-44f0-92e7-d1fda3b5935d" manual="true">
+          <bo>
+            <seg>flow_specification</seg>
+            <seg>telemetry_flow</seg>
+          </bo>
+          <position x="137.62369537353516" y="97.0"/>
         </element>
         <bo>
           <seg>subcomponent</seg>
@@ -918,7 +938,7 @@
               <seg>feature</seg>
               <seg>telemetry_in</seg>
             </bo>
-            <position x="92.78125" y="40.0"/>
+            <position x="92.78125" y="20.00000000000003"/>
           </element>
           <element uuid="c1d46d50-2e35-4ae0-af1a-d858bbe293b5" manual="true" dockArea="left">
             <bo>
@@ -926,6 +946,18 @@
               <seg>telemetry_out</seg>
             </bo>
             <position y="20.0"/>
+          </element>
+          <element uuid="68c615b0-0e8b-4a85-a1a7-b15b73fd5c24" manual="true">
+            <bo>
+              <seg>flow_specification</seg>
+              <seg>external_telemetry_flow</seg>
+            </bo>
+          </element>
+          <element uuid="9a546aae-a600-4d3c-8d37-bc2360a6c867" manual="true">
+            <bo>
+              <seg>flow_specification</seg>
+              <seg>sensor_telemetry_flow</seg>
+            </bo>
           </element>
           <bo>
             <seg>subcomponent</seg>

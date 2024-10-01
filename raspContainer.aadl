@@ -41,6 +41,8 @@ public
 		flows
 			sensor_flow: end to end flow navio2.sensor_flow -> c1 -> sensor_driver.sensor_flow -> c4 -> communication_interface.sensor_flow -> c15 -> com_device.sensor_flow;
 			commands_flow: end to end flow ground_station.commands_flow -> c9 -> telemetry.commands_flow -> c3 -> communication_interface.commands_flow -> c15 -> com_device.commands_flow;
+			sensor_telemetry_flow: end to end flow navio2.sensor_flow -> c1 -> sensor_driver.sensor_telemetry_flow -> c7 -> telemetry.sensor_telemetry_flow -> c10 -> ground_station.telemetry_flow;
+			external_telemetry_flow: end to end flow com_device.telemetry_flow -> c14 -> communication_interface.telemetry_flow -> c11 -> telemetry.external_telemetry_flow -> c10 -> ground_station.telemetry_flow;
 		properties
 			Actual_Processor_Binding => (reference (cpu)) applies to telemetry, communication_interface, sensor_driver, health_and_recorder;
 	end raspberryContainer.impl;
@@ -78,6 +80,8 @@ public
 			telemetry_out: out data port;
 		flows
 			commands_flow: flow path ground_commands_in -> ground_commands_out;
+			external_telemetry_flow: flow path telemetry_external_in -> telemetry_out;
+			sensor_telemetry_flow: flow path telemetry_sensor_in -> telemetry_out;
 	end TelemetryProcess;
 	
 	process implementation TelemetryProcess.server
@@ -92,6 +96,8 @@ public
 			c5: port commands_thread.commands_out -> ground_commands_out;
 		flows
 			commands_flow: flow path ground_commands_in -> c4 -> commands_thread.commands_flow -> c5 -> ground_commands_out;
+			external_telemetry_flow: flow path telemetry_external_in -> c1 -> telemetry_thread.external_telemetry_flow -> c3 -> telemetry_out;
+			sensor_telemetry_flow: flow path telemetry_sensor_in -> c2 -> telemetry_thread.sensor_telemetry_flow -> c3 -> telemetry_out;
 	end TelemetryProcess.server;
 	
 	process HealthMonitorAndDataRecorder 
@@ -123,6 +129,7 @@ public
 		flows
 			sensor_flow: flow path sensor_in -> com_out;
 			commands_flow: flow path ground_commands_in -> com_out;
+			telemetry_flow: flow path com_in -> telemetry_out;
 	end CommunicationInterface;
 	
 	process implementation CommunicationInterface.impl
@@ -142,6 +149,7 @@ public
 		flows
 			sensor_flow: flow path sensor_in -> c8 -> sensor_com.flow_sensor -> c3 -> com_out;
 			commands_flow: flow path ground_commands_in -> c6 -> telemetry_and_commands.commands_flow -> c4 -> com_out;
+			telemetry_flow: flow path com_in -> c1 -> telemetry_and_commands.telemetry_flow -> c5 -> telemetry_out;
 	end CommunicationInterface.impl;
 	
 	process SensorDriver
@@ -152,6 +160,7 @@ public
 			navio2_sensor_in: in data port;
 		flows
 			sensor_flow: flow path navio2_sensor_in -> sensor_communication_out;
+			sensor_telemetry_flow: flow path navio2_sensor_in -> sensor_telemetry_out;
 	end SensorDriver;
 	
 	process implementation SensorDriver.impl
@@ -172,6 +181,7 @@ public
 			c9: port process_data.procData_out -> sensor_telemetry_out;
 		flows
 			sensor_flow: flow path navio2_sensor_in -> c6 -> process_data.sensor_flow -> c7 -> sensor_communication_out;
+			sensor_telemetry_flow: flow path navio2_sensor_in -> c6 -> process_data.sensor_flow -> c9 -> sensor_telemetry_out;
 		
 	end SensorDriver.impl;
 	
@@ -192,6 +202,7 @@ public
 			telemetry_in: in data port;
 		flows
 			commands_flow: flow source commands_out;
+			telemetry_flow: flow sink telemetry_in;
 	end GroundStation;
 	device implementation GroundStation.impl
 	end GroundStation.impl;
@@ -204,6 +215,7 @@ public
 		flows
 			sensor_flow: flow sink com_in {Latency => 0ns .. 16666ns;};
 			commands_flow: flow sink com_in;
+			telemetry_flow: flow source com_out;
 	end CommunicationDevice;
 	device implementation CommunicationDevice.impl
 	end CommunicationDevice.impl;
@@ -298,6 +310,7 @@ public
 			ground_commands_out: out data port;
 		flows
 			commands_flow: flow path ground_commands_in -> ground_commands_out;
+			telemetry_flow: flow path external_telemetry_in -> telemetry_out;
 	end TelemetryCommands;
 	thread implementation TelemetryCommands.impl -- Should be as fast as the thread that gets the GS commands
 		properties
@@ -339,6 +352,9 @@ public
 			telemetry_in: in data port;
 			sensor_in: in data port;
 			telemetry_out: out data port;
+		flows 
+			external_telemetry_flow: flow path telemetry_in -> telemetry_out;
+			sensor_telemetry_flow: flow path sensor_in -> telemetry_out;
 	end TelemetryThread;
 	thread implementation TelemetryThread.impl
 		properties
