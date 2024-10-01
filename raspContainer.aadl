@@ -39,8 +39,8 @@ public
 			c15: port communication_interface.com_out -> com_device.com_in;
 		
 		flows
-			flow_1: end to end flow navio2.flow1 -> c1 -> sensor_driver.flow1 -> c4 -> communication_interface.flow1 -> c15 -> com_device.flow1;
-		
+			sensor_flow: end to end flow navio2.sensor_flow -> c1 -> sensor_driver.sensor_flow -> c4 -> communication_interface.sensor_flow -> c15 -> com_device.sensor_flow;
+			commands_flow: end to end flow ground_station.commands_flow -> c9 -> telemetry.commands_flow -> c3 -> communication_interface.commands_flow -> c15 -> com_device.commands_flow;
 		properties
 			Actual_Processor_Binding => (reference (cpu)) applies to telemetry, communication_interface, sensor_driver, health_and_recorder;
 	end raspberryContainer.impl;
@@ -73,9 +73,11 @@ public
 		features
 			telemetry_external_in: in data port;
 			telemetry_sensor_in: in data port;
-			ground_commands_out: out event port;
-			ground_commands_in: in event port;
+			ground_commands_out: out data port;
+			ground_commands_in: in data port;
 			telemetry_out: out data port;
+		flows
+			commands_flow: flow path ground_commands_in -> ground_commands_out;
 	end TelemetryProcess;
 	
 	process implementation TelemetryProcess.server
@@ -88,12 +90,14 @@ public
 			c3: port telemetry_thread.telemetry_out -> telemetry_out;
 			c4: port ground_commands_in -> commands_thread.commands_in;
 			c5: port commands_thread.commands_out -> ground_commands_out;
+		flows
+			commands_flow: flow path ground_commands_in -> c4 -> commands_thread.commands_flow -> c5 -> ground_commands_out;
 	end TelemetryProcess.server;
 	
 	process HealthMonitorAndDataRecorder 
 		features
-			record_external_in: in data port RecordData.impl;
-			record_sensor_in: in data port SensorData.impl;
+			record_external_in: in data port;
+			record_sensor_in: in data port;
 			health_out: out event port;
 	end HealthMonitorAndDataRecorder;
 	
@@ -110,14 +114,15 @@ public
 	process CommunicationInterface
 		features 
 			health_in: in event port;
-			telemetry_out: out data port TelemetryData.impl;
-			record_out: out data port RecordData.impl;
-			sensor_in: in data port SensorData.impl;
-			ground_commands_in: in event port;
+			telemetry_out: out data port;
+			record_out: out data port;
+			sensor_in: in data port;
+			ground_commands_in: in data port;
 			com_out: out data port;
 			com_in: in data port;
 		flows
-			flow1: flow path sensor_in -> com_out;
+			sensor_flow: flow path sensor_in -> com_out;
+			commands_flow: flow path ground_commands_in -> com_out;
 	end CommunicationInterface;
 	
 	process implementation CommunicationInterface.impl
@@ -135,7 +140,8 @@ public
 			c7: port external_data_com.data_out -> record_out;
 			c8: port sensor_in -> sensor_com.sensor_in;
 		flows
-			flow1: flow path sensor_in -> c8 -> sensor_com.flow_sensor -> c3 -> com_out;
+			sensor_flow: flow path sensor_in -> c8 -> sensor_com.flow_sensor -> c3 -> com_out;
+			commands_flow: flow path ground_commands_in -> c6 -> telemetry_and_commands.commands_flow -> c4 -> com_out;
 	end CommunicationInterface.impl;
 	
 	process SensorDriver
@@ -143,9 +149,9 @@ public
 			sensor_telemetry_out: out data port;
 			sensor_communication_out: out data port;
 			sensor_record_out: out data port;
-			navio2_sensor_in: in data port SensorData.impl;
+			navio2_sensor_in: in data port;
 		flows
-			flow1: flow path navio2_sensor_in -> sensor_communication_out;
+			sensor_flow: flow path navio2_sensor_in -> sensor_communication_out;
 	end SensorDriver;
 	
 	process implementation SensorDriver.impl
@@ -165,7 +171,7 @@ public
 			c8: port process_data.procData_out -> sensor_record_out;
 			c9: port process_data.procData_out -> sensor_telemetry_out;
 		flows
-			flow1: flow path navio2_sensor_in -> c6 -> process_data.flow1 -> c7 -> sensor_communication_out;
+			sensor_flow: flow path navio2_sensor_in -> c6 -> process_data.sensor_flow -> c7 -> sensor_communication_out;
 		
 	end SensorDriver.impl;
 	
@@ -173,17 +179,19 @@ public
 	------------- DEVICES -------------
 	device Navio2
 		features
-			sensors_out: out data port SensorData.impl;
+			sensors_out: out data port;
 		flows
-			flow1: flow source sensors_out {Latency => 0ns .. 16666ns;};
+			sensor_flow: flow source sensors_out {Latency => 0ns .. 16666ns;};
 	end Navio2;
 	device implementation Navio2.impl
 	end Navio2.impl;
 	
 	device GroundStation
 		features
-			commands_out: out event port;
-			telemetry_in: in data port TelemetryData.impl;
+			commands_out: out data port;
+			telemetry_in: in data port;
+		flows
+			commands_flow: flow source commands_out;
 	end GroundStation;
 	device implementation GroundStation.impl
 	end GroundStation.impl;
@@ -194,7 +202,8 @@ public
 			com_out: out data port;
 			com_in: in data port;
 		flows
-			flow1: flow sink com_in {Latency => 0ns .. 16666ns;};
+			sensor_flow: flow sink com_in {Latency => 0ns .. 16666ns;};
+			commands_flow: flow sink com_in;
 	end CommunicationDevice;
 	device implementation CommunicationDevice.impl
 	end CommunicationDevice.impl;
@@ -204,8 +213,8 @@ public
 	-- Records sensor data and other relevant info in the memory of the board
 	-- Does it record on the RAM or an external memory (that would survive a loss of power)?
 		features
-			sensor_record: in data port SensorData.impl;
-			com_record: in data port RecordData.impl;
+			sensor_record: in data port;
+			com_record: in data port;
 	end DataRecorder;
 	thread implementation DataRecorder.impl
 		properties
@@ -237,10 +246,10 @@ public
 	-- Processes raw data sent from the sensors into readable data for the various other components
 	-- Could be separated into different threads for each different type of sensor
 		features
-			rawData_in: in data port SensorData.impl;
+			rawData_in: in data port;
 			procData_out: out data port;
 		flows
-			flow1: flow path rawData_in -> procData_out;
+			sensor_flow: flow path rawData_in -> procData_out;
 	end Driver_data_proc;
 	thread implementation Driver_data_proc.impl
 		properties
@@ -254,7 +263,7 @@ public
 	
 	thread SensorCom
 		features
-			sensor_in: in data port SensorData.impl;
+			sensor_in: in data port;
 			sensor_out: out data port;
 		flows 
 			flow_sensor: flow path sensor_in -> sensor_out;	
@@ -284,9 +293,11 @@ public
 	-- Gets Ground Station commands to send them to the other components of the UAV via the bus connection
 		features
 			external_telemetry_in: in data port;
-			telemetry_out: out data port TelemetryData.impl;
-			ground_commands_in: in event port;
+			telemetry_out: out data port;
+			ground_commands_in: in data port;
 			ground_commands_out: out data port;
+		flows
+			commands_flow: flow path ground_commands_in -> ground_commands_out;
 	end TelemetryCommands;
 	thread implementation TelemetryCommands.impl -- Should be as fast as the thread that gets the GS commands
 		properties
@@ -302,7 +313,7 @@ public
 	-- Gets telemetry data from other components of the UAV via the bus connection
 		features
 			data_in: in data port;
-			data_out: out data port RecordData.impl;
+			data_out: out data port;
 	end ExternalDataCom;
 	thread implementation ExternalDataCom.impl -- Execution every 500ms
 		properties
@@ -316,7 +327,7 @@ public
 	
 	thread SensorTelemetryRecorder -- NOT USED ANYMORE
 		features
-			sensor_in: in data port SensorData.impl;
+			sensor_in: in data port;
 			sensor_out: out data port;
 	end SensorTelemetryRecorder;
 	thread implementation SensorTelemetryRecorder.impl
@@ -343,8 +354,10 @@ public
 	-- Listens for commands from the ground station and broadcasts them to the Communication Interface
 	-- Listens periodically?
 		features
-			commands_in: in event port;
-			commands_out: out event port;
+			commands_in: in data port;
+			commands_out: out data port;
+		flows
+			commands_flow: flow path commands_in -> commands_out;
 	end CommandsThread;
 	thread implementation CommandsThread.impl
 		properties
@@ -356,27 +369,5 @@ public
 			dispatch_offset => 500 us; -- Non-zero start time
 	end CommandsThread.impl;
     ------------------------------------
-	
-	------------- ALL DATA -------------
-	data HealthMessages
-	end HealthMessages;
-	data implementation HealthMessages.impl
-	end HealthMessages.impl;
-	
-	data TelemetryData
-	end TelemetryData;
-	data implementation telemetryData.impl
-	end telemetryData.impl;
-	
-	data recordData
-	end recordData;
-	data implementation recordData.impl
-	end recordData.impl;
-	
-	data sensorData
-	end sensorData;
-	data implementation sensorData.impl
-	end sensorData.impl;
-	------------------------------------
 
 end raspContainer;

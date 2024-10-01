@@ -140,7 +140,7 @@
           <seg>c6</seg>
         </bo>
         <bendpoints>
-          <point x="341.0000305175781" y="606.0"/>
+          <point x="341.0" y="606.0"/>
         </bendpoints>
       </element>
       <element uuid="ef20609f-d897-4461-a8de-686782878466" manual="true">
@@ -155,7 +155,7 @@
           <seg>c7</seg>
         </bo>
         <bendpoints>
-          <point x="449.00006103515625" y="302.0"/>
+          <point x="449.0" y="302.0"/>
         </bendpoints>
       </element>
       <element uuid="6302be76-f93b-4425-bbc8-cb2c685790fd" manual="true">
@@ -216,10 +216,21 @@
           </bo>
           <position y="140.0"/>
         </element>
-        <element uuid="d8e5a509-2d11-491b-a5df-bf10bca1b6d7" manual="true">
+        <element uuid="58df0d4a-4f54-466f-8880-30eb86905a5d" manual="true">
           <bo>
             <seg>flow_specification</seg>
-            <seg>flow1</seg>
+            <seg>commands_flow</seg>
+          </bo>
+          <position x="50.0" y="132.0"/>
+          <bendpoints>
+            <point x="1210.0" y="242.0"/>
+            <point x="1210.0" y="262.0"/>
+          </bendpoints>
+        </element>
+        <element uuid="f44fe00f-6a15-4fb0-8a33-d234dffdf308" manual="true">
+          <bo>
+            <seg>flow_specification</seg>
+            <seg>sensor_flow</seg>
           </bo>
           <position x="50.0" y="112.0"/>
         </element>
@@ -380,12 +391,6 @@
           </bo>
           <position y="130.0"/>
         </element>
-        <element uuid="a69cad5f-8315-447a-98cb-70ae7684322a" manual="true">
-          <bo>
-            <seg>flow_specification</seg>
-            <seg>flow1</seg>
-          </bo>
-        </element>
         <element uuid="16dd9576-604d-4112-83a6-4905e4a2a7d7" manual="true">
           <element uuid="3e157f7d-63f1-4e37-889f-e5e5274a87b3" manual="true" dockArea="right">
             <bo>
@@ -465,6 +470,12 @@
             </bo>
             <position y="100.0"/>
           </element>
+          <element uuid="559d0321-ee9d-4bf1-84a4-5271c332774a" manual="true">
+            <bo>
+              <seg>flow_specification</seg>
+              <seg>commands_flow</seg>
+            </bo>
+          </element>
           <bo>
             <seg>subcomponent</seg>
             <seg>telemetry_and_commands</seg>
@@ -516,6 +527,13 @@
             <seg>telemetry_in</seg>
           </bo>
           <position x="103.37630462646484" y="65.0"/>
+        </element>
+        <element uuid="3330c055-9ffa-4280-9b1f-4ab54fbfea15" manual="true">
+          <bo>
+            <seg>flow_specification</seg>
+            <seg>commands_flow</seg>
+          </bo>
+          <position x="137.1588592529297" y="52.0"/>
         </element>
         <bo>
           <seg>subcomponent</seg>
@@ -634,10 +652,10 @@
           </bo>
           <position x="11.36328125" y="40.0"/>
         </element>
-        <element uuid="ac1df47d-b704-4af1-9050-edd4e25062c7" manual="true">
+        <element uuid="a020d351-5024-4b68-8998-d9a01efb2ac6" manual="true">
           <bo>
             <seg>flow_specification</seg>
-            <seg>flow1</seg>
+            <seg>sensor_flow</seg>
           </bo>
           <position x="45.63671875" y="72.0"/>
         </element>
@@ -697,7 +715,7 @@
             <seg>c9</seg>
           </bo>
           <bendpoints>
-            <point x="366.0000305175781" y="320.0"/>
+            <point x="366.0" y="320.0"/>
           </bendpoints>
         </element>
         <element uuid="cfb72c3f-1b1e-4ab4-9c71-964ae522bbf1" manual="true" dockArea="left">
@@ -743,10 +761,10 @@
             </bo>
             <position y="40.0"/>
           </element>
-          <element uuid="f8ea01c4-2a1b-46ea-ae55-a2056979abf4" manual="true">
+          <element uuid="1cd9d6ba-2833-4517-9cc2-7b63002c37e5" manual="true">
             <bo>
               <seg>flow_specification</seg>
-              <seg>flow1</seg>
+              <seg>sensor_flow</seg>
             </bo>
           </element>
           <bo>
@@ -873,6 +891,12 @@
               <seg>commands_out</seg>
             </bo>
             <position x="96.84114074707031" y="20.0"/>
+          </element>
+          <element uuid="f36b9e2b-8e1d-4563-91ba-3f4f40897911" manual="true">
+            <bo>
+              <seg>flow_specification</seg>
+              <seg>commands_flow</seg>
+            </bo>
           </element>
           <bo>
             <seg>subcomponent</seg>
