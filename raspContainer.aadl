@@ -5,46 +5,75 @@ public
 	
 	system raspberryContainer
 		features
-			com_bus: requires bus access interSystemCom::communicationInterfaceBus.impl;
+			com_bus: requires bus access interSystemCom::communicationInterfaceBus.impl;		
 	end raspberryContainer;
+	
+	
 	
 	system implementation RaspberryContainer.impl
 		subcomponents
 			cpu: processor Raspberry.impl;
 			
-			navio2: device Navio2.impl;
-			ground_station: device GroundStation.impl;
-			com_device: device CommunicationDevice.impl;
+			navio2:			device Navio2.impl;
+			ground_station:	device GroundStation.impl;
+			com_device:		device CommunicationDevice.impl;
 			
-			communication_interface: process CommunicationInterface.impl;
-			sensor_driver: process SensorDriver.impl;
-			telemetry: process TelemetryProcess.server;	
-			health_and_recorder: process HealthMonitorAndDataRecorder.impl;
+			communication_interface:	process CommunicationInterface.impl;
+			sensor_driver:				process SensorDriver.impl;
+			telemetry:					process TelemetryProcess.server;	
+			health_and_recorder:		process HealthMonitorAndDataRecorder.impl;
 			
 		connections
-			c1: port navio2.sensors_out -> sensor_driver.navio2_sensor_in;
-			c2: port health_and_recorder.health_out -> communication_interface.health_in;
-			c3: port telemetry.ground_commands_out -> communication_interface.ground_commands_in;
-			c4: port sensor_driver.sensor_communication_out -> communication_interface.sensor_in;
-			c5: port communication_interface.record_out -> health_and_recorder.record_external_in;
-			c6: port sensor_driver.sensor_record_out -> health_and_recorder.record_sensor_in;
-			c7: port sensor_driver.sensor_telemetry_out -> telemetry.telemetry_sensor_in;
-			c8: port navio2.sensors_out -> sensor_driver.navio2_sensor_in;
-			c9: port ground_station.commands_out -> telemetry.ground_commands_in;
+			c1:  port navio2.sensors_out -> sensor_driver.navio2_sensor_in;
+			c2:  port health_and_recorder.health_out -> communication_interface.health_in;
+			c3:  port telemetry.ground_commands_out -> communication_interface.ground_commands_in;
+			c4:  port sensor_driver.sensor_communication_out -> communication_interface.sensor_in;
+			c5:  port communication_interface.record_out -> health_and_recorder.record_external_in;
+			c6:  port sensor_driver.sensor_record_out -> health_and_recorder.record_sensor_in;
+			c7:  port sensor_driver.sensor_telemetry_out -> telemetry.telemetry_sensor_in;
+			c8:  port navio2.sensors_out -> sensor_driver.navio2_sensor_in;
+			c9:  port ground_station.commands_out -> telemetry.ground_commands_in;
 			c10: port telemetry.telemetry_out -> ground_station.telemetry_in;
 			c11: port communication_interface.telemetry_out -> telemetry.telemetry_external_in;
 			c12: bus access com_bus <-> cpu.com_bus;
 			c13: bus access com_bus <-> com_device.com_bus;
 			c14: port com_device.com_out -> communication_interface.com_in;
-			c15: port communication_interface.com_out -> com_device.com_in;
+			c15: port communication_interface.com_out -> com_device.com_in;	
 		
 		flows
-			sensor_flow: end to end flow navio2.sensor_flow -> c1 -> sensor_driver.sensor_flow -> c4 -> communication_interface.sensor_flow -> c15 -> com_device.sensor_flow;
-			commands_flow: end to end flow ground_station.commands_flow -> c9 -> telemetry.commands_flow -> c3 -> communication_interface.commands_flow -> c15 -> com_device.commands_flow;
-			sensor_telemetry_flow: end to end flow navio2.sensor_flow -> c1 -> sensor_driver.sensor_telemetry_flow -> c7 -> telemetry.sensor_telemetry_flow -> c10 -> ground_station.telemetry_flow;
-			external_telemetry_flow: end to end flow com_device.telemetry_flow -> c14 -> communication_interface.telemetry_flow -> c11 -> telemetry.external_telemetry_flow -> c10 -> ground_station.telemetry_flow;
+			sensor_flow: end to end flow 
+				navio2.sensor_flow -> c1 -> sensor_driver.sensor_flow -> c4 -> 
+				communication_interface.sensor_flow -> c15 -> com_device.sensor_flow;
+			commands_flow: end to end flow
+				ground_station.commands_flow -> c9 -> telemetry.commands_flow -> c3 -> 
+				communication_interface.commands_flow -> c15 -> com_device.commands_flow;
+			sensor_telemetry_flow: end to end flow 
+				navio2.sensor_flow -> c1 -> sensor_driver.sensor_telemetry_flow -> c7 -> 
+				telemetry.sensor_telemetry_flow -> c10 -> ground_station.telemetry_flow;
+			external_telemetry_flow: end to end flow 
+				com_device.telemetry_flow -> c14 -> communication_interface.telemetry_flow -> c11 -> 
+				telemetry.external_telemetry_flow -> c10 -> ground_station.telemetry_flow;
+			
+		modes
+			PreFlight: 	initial mode;			
+			Standby: 	mode;			
+			Manual: 	mode;			
+			Automatic: 	mode;
+			FailSafe: 	mode;
+			
+			-- Normal Function Triggers
+			T0: PreFlight 	-[health_and_recorder.health_out]-> Standby; --Maybe change the trigger for this one
+			T1: Standby 	-[ground_station.commands_out]->	Manual;
+			T2: Standby 	-[ground_station.commands_out]-> 	Automatic;
+			T3: Automatic 	-[ground_station.commands_out]-> 	Manual;
+			T4: Manual 		-[ground_station.commands_out]-> 	Automatic;
+			-- Fail Safe Triggers
+			T5: Automatic 	-[health_and_recorder.health_out]-> FailSafe;
+			T6: Manual 		-[health_and_recorder.health_out]-> FailSafe;
+						
 		properties
 			Actual_Processor_Binding => (reference (cpu)) applies to telemetry, communication_interface, sensor_driver, health_and_recorder;
+			
 	end raspberryContainer.impl;
 
 
@@ -73,21 +102,21 @@ public
 	
 	process TelemetryProcess
 		features
-			telemetry_external_in: in data port;
-			telemetry_sensor_in: in data port;
-			ground_commands_out: out data port;
-			ground_commands_in: in data port;
-			telemetry_out: out data port;
+			telemetry_external_in: 	in data port;
+			telemetry_sensor_in: 	in data port;
+			ground_commands_out: 	out data port;
+			ground_commands_in: 	in data port;
+			telemetry_out: 			out data port;
 		flows
-			commands_flow: flow path ground_commands_in -> ground_commands_out;
-			external_telemetry_flow: flow path telemetry_external_in -> telemetry_out;
-			sensor_telemetry_flow: flow path telemetry_sensor_in -> telemetry_out;
+			commands_flow:				flow path ground_commands_in -> ground_commands_out;
+			external_telemetry_flow:	flow path telemetry_external_in -> telemetry_out;
+			sensor_telemetry_flow:		flow path telemetry_sensor_in -> telemetry_out;
 	end TelemetryProcess;
 	
 	process implementation TelemetryProcess.server
 		subcomponents
-			telemetry_thread: thread TelemetryThread.impl;
-			commands_thread: thread CommandsThread.impl;
+			telemetry_thread:	thread TelemetryThread.impl;
+			commands_thread:	thread CommandsThread.impl;
 		connections
 			c1: port telemetry_external_in -> telemetry_thread.telemetry_in;
 			c2: port telemetry_sensor_in -> telemetry_thread.sensor_in;
@@ -95,22 +124,28 @@ public
 			c4: port ground_commands_in -> commands_thread.commands_in;
 			c5: port commands_thread.commands_out -> ground_commands_out;
 		flows
-			commands_flow: flow path ground_commands_in -> c4 -> commands_thread.commands_flow -> c5 -> ground_commands_out;
-			external_telemetry_flow: flow path telemetry_external_in -> c1 -> telemetry_thread.external_telemetry_flow -> c3 -> telemetry_out;
-			sensor_telemetry_flow: flow path telemetry_sensor_in -> c2 -> telemetry_thread.sensor_telemetry_flow -> c3 -> telemetry_out;
+			commands_flow: flow path 
+				ground_commands_in -> c4 -> commands_thread.commands_flow -> c5 -> ground_commands_out;
+			external_telemetry_flow: flow path 
+				telemetry_external_in -> c1 -> telemetry_thread.external_telemetry_flow -> c3 -> telemetry_out;
+			sensor_telemetry_flow: flow path 
+				telemetry_sensor_in -> c2 -> telemetry_thread.sensor_telemetry_flow -> c3 -> telemetry_out;
 	end TelemetryProcess.server;
 	
 	process HealthMonitorAndDataRecorder 
 		features
 			record_external_in: in data port;
-			record_sensor_in: in data port;
-			health_out: out event port;
+			record_sensor_in: 	in data port;
+			health_out: 		out event port;
 	end HealthMonitorAndDataRecorder;
 	
 	process implementation HealthMonitorAndDataRecorder.impl
 		subcomponents
 			health_thread: thread HealthMonitor.impl;
 			data_recorder: thread DataRecorder.impl;
+		internal features
+			initialAssesmentOK: event;
+			triggerFailSafe: event;
 		connections
 			c1: port record_external_in -> data_recorder.com_record;
 			c2: port record_sensor_in -> data_recorder.sensor_record;
@@ -119,24 +154,24 @@ public
 	
 	process CommunicationInterface
 		features 
-			health_in: in event port;
-			telemetry_out: out data port;
-			record_out: out data port;
-			sensor_in: in data port;
-			ground_commands_in: in data port;
-			com_out: out data port;
-			com_in: in data port;
+			health_in: 			in event port;
+			telemetry_out: 		out data port;
+			record_out: 		out data port;
+			sensor_in: 			in data port;
+			ground_commands_in:	in data port;
+			com_out: 			out data port;
+			com_in: 			in data port;
 		flows
-			sensor_flow: flow path sensor_in -> com_out;
-			commands_flow: flow path ground_commands_in -> com_out;
+			sensor_flow: 	flow path sensor_in -> com_out;
+			commands_flow: 	flow path ground_commands_in -> com_out;
 			telemetry_flow: flow path com_in -> telemetry_out;
 	end CommunicationInterface;
 	
 	process implementation CommunicationInterface.impl
 		subcomponents
-			sensor_com: thread SensorCom.com;
+			sensor_com: 			thread SensorCom.com;
 			telemetry_and_commands: thread TelemetryCommands.impl;
-			external_data_com: thread ExternalDataCom.impl;
+			external_data_com: 		thread ExternalDataCom.impl;
 		connections
 			c1: port com_in -> telemetry_and_commands.external_telemetry_in;
 			c2: port com_in -> external_data_com.data_in;
@@ -147,41 +182,38 @@ public
 			c7: port external_data_com.data_out -> record_out;
 			c8: port sensor_in -> sensor_com.sensor_in;
 		flows
-			sensor_flow: flow path sensor_in -> c8 -> sensor_com.flow_sensor -> c3 -> com_out;
-			commands_flow: flow path ground_commands_in -> c6 -> telemetry_and_commands.commands_flow -> c4 -> com_out;
-			telemetry_flow: flow path com_in -> c1 -> telemetry_and_commands.telemetry_flow -> c5 -> telemetry_out;
+			sensor_flow: 	flow path 
+				sensor_in -> c8 -> sensor_com.flow_sensor -> c3 -> com_out;
+			commands_flow: 	flow path 
+				ground_commands_in -> c6 -> telemetry_and_commands.commands_flow -> c4 -> com_out;
+			telemetry_flow: flow path 
+				com_in -> c1 -> telemetry_and_commands.telemetry_flow -> c5 -> telemetry_out;
 	end CommunicationInterface.impl;
 	
 	process SensorDriver
 		features
-			sensor_telemetry_out: out data port;
-			sensor_communication_out: out data port;
-			sensor_record_out: out data port;
-			navio2_sensor_in: in data port;
+			sensor_telemetry_out: 		out data port;
+			sensor_communication_out: 	out data port;
+			sensor_record_out: 			out data port;
+			navio2_sensor_in: 			in data port;
 		flows
-			sensor_flow: flow path navio2_sensor_in -> sensor_communication_out;
-			sensor_telemetry_flow: flow path navio2_sensor_in -> sensor_telemetry_out;
+			sensor_flow: 			flow path navio2_sensor_in -> sensor_communication_out;
+			sensor_telemetry_flow: 	flow path navio2_sensor_in -> sensor_telemetry_out;
 	end SensorDriver;
 	
 	process implementation SensorDriver.impl
 		subcomponents
 			process_data: thread Driver_data_proc.impl;
-			--sensor_external: thread SensorCom.sensor;
-			--sensor_telemetry_recorder: thread SensorTelemetryRecorder.impl;
 		connections			
-			--c1: port navio2_sensor_in -> sensor_external.sensor_in;
-			--c2: port navio2_sensor_in -> sensor_telemetry_recorder.sensor_in;
-			--c3: port sensor_external.sensor_out -> sensor_communication_out;
-			--c4: port sensor_telemetry_recorder.sensor_out -> sensor_record_out;
-			--c5: port sensor_telemetry_recorder.sensor_out -> sensor_telemetry_out;
-			
 			c6: port navio2_sensor_in -> process_data.rawData_in;
 			c7: port process_data.procData_out -> sensor_communication_out;
 			c8: port process_data.procData_out -> sensor_record_out;
 			c9: port process_data.procData_out -> sensor_telemetry_out;
 		flows
-			sensor_flow: flow path navio2_sensor_in -> c6 -> process_data.sensor_flow -> c7 -> sensor_communication_out;
-			sensor_telemetry_flow: flow path navio2_sensor_in -> c6 -> process_data.sensor_flow -> c9 -> sensor_telemetry_out;
+			sensor_flow: 			flow path 
+				navio2_sensor_in -> c6 -> process_data.sensor_flow -> c7 -> sensor_communication_out;
+			sensor_telemetry_flow: 	flow path 
+				navio2_sensor_in -> c6 -> process_data.sensor_flow -> c9 -> sensor_telemetry_out;
 		
 	end SensorDriver.impl;
 	
@@ -191,7 +223,7 @@ public
 		features
 			sensors_out: out data port;
 		flows
-			sensor_flow: flow source sensors_out {Latency => 0ns .. 16666ns;};
+			sensor_flow: flow source sensors_out {Latency => 1us .. 10us;};
 	end Navio2;
 	device implementation Navio2.impl
 	end Navio2.impl;
@@ -201,8 +233,8 @@ public
 			commands_out: out data port;
 			telemetry_in: in data port;
 		flows
-			commands_flow: flow source commands_out;
-			telemetry_flow: flow sink telemetry_in;
+			commands_flow: 	flow source commands_out {Latency => 10ms .. 100ms;};
+			telemetry_flow: flow sink 	telemetry_in;
 	end GroundStation;
 	device implementation GroundStation.impl
 	end GroundStation.impl;
@@ -211,11 +243,11 @@ public
 		features
 			com_bus: requires bus access interSystemCom::communicationInterfaceBus.impl;
 			com_out: out data port;
-			com_in: in data port;
+			com_in:  in data port;
 		flows
-			sensor_flow: flow sink com_in {Latency => 0ns .. 16666ns;};
-			commands_flow: flow sink com_in;
-			telemetry_flow: flow source com_out;
+			sensor_flow: 	flow sink 	com_in;
+			commands_flow: 	flow sink 	com_in;
+			telemetry_flow: flow source com_out {Latency => 10us .. 100us;};
 	end CommunicationDevice;
 	device implementation CommunicationDevice.impl
 	end CommunicationDevice.impl;
@@ -225,8 +257,8 @@ public
 	-- Records sensor data and other relevant info in the memory of the board
 	-- Does it record on the RAM or an external memory (that would survive a loss of power)?
 		features
-			sensor_record: in data port;
-			com_record: in data port;
+			sensor_record: 	in data port;
+			com_record: 	in data port;
 	end DataRecorder;
 	thread implementation DataRecorder.impl
 		properties
@@ -248,7 +280,7 @@ public
 		properties
 			dispatch_protocol => periodic;
 			period => 100 ms; --Should it have a higher frequency?
-			deadline => 100 ms; --Same as period?
+			deadline => 100 ms;
 			priority => 4;
 			compute_execution_time => 5 ms .. 10 ms;
 			dispatch_offset => 1 ms;
@@ -258,8 +290,8 @@ public
 	-- Processes raw data sent from the sensors into readable data for the various other components
 	-- Could be separated into different threads for each different type of sensor
 		features
-			rawData_in: in data port;
-			procData_out: out data port;
+			rawData_in: 	in data port;
+			procData_out: 	out data port;
 		flows
 			sensor_flow: flow path rawData_in -> procData_out;
 	end Driver_data_proc;
@@ -267,7 +299,7 @@ public
 		properties
 			dispatch_protocol => periodic;
 			period => 3 ms; 
-			deadline => 3 ms; --Same as period?
+			deadline => 3 ms;
 			priority => 5;
 			compute_execution_time => 250 us .. 500 us;
 			dispatch_offset => 50 us; -- Non-zero start time (should be lower? -> RAM write speed)
@@ -275,7 +307,7 @@ public
 	
 	thread SensorCom
 		features
-			sensor_in: in data port;
+			sensor_in: 	in data port;
 			sensor_out: out data port;
 		flows 
 			flow_sensor: flow path sensor_in -> sensor_out;	
@@ -284,7 +316,7 @@ public
 	properties
 		dispatch_protocol => periodic;
 		period => 3 ms; 
-		deadline => 3 ms; --Same as period?
+		deadline => 3 ms;
 		priority => 5;
 		compute_execution_time => 250 us .. 500 us;
 		dispatch_offset => 50 us; -- Non-zero start time
@@ -304,13 +336,13 @@ public
 	-- AND
 	-- Gets Ground Station commands to send them to the other components of the UAV via the bus connection
 		features
-			external_telemetry_in: in data port;
-			telemetry_out: out data port;
-			ground_commands_in: in data port;
-			ground_commands_out: out data port;
+			external_telemetry_in: 	in data port;
+			telemetry_out: 			out data port;
+			ground_commands_in: 	in data port;
+			ground_commands_out: 	out data port;
 		flows
-			commands_flow: flow path ground_commands_in -> ground_commands_out;
-			telemetry_flow: flow path external_telemetry_in -> telemetry_out;
+			commands_flow:	flow path ground_commands_in -> ground_commands_out;
+			telemetry_flow:	flow path external_telemetry_in -> telemetry_out;
 	end TelemetryCommands;
 	thread implementation TelemetryCommands.impl -- Should be as fast as the thread that gets the GS commands
 		properties
@@ -325,7 +357,7 @@ public
 	thread ExternalDataCom
 	-- Gets telemetry data from other components of the UAV via the bus connection
 		features
-			data_in: in data port;
+			data_in:  in data port;
 			data_out: out data port;
 	end ExternalDataCom;
 	thread implementation ExternalDataCom.impl -- Execution every 500ms
@@ -340,7 +372,7 @@ public
 	
 	thread SensorTelemetryRecorder -- NOT USED ANYMORE
 		features
-			sensor_in: in data port;
+			sensor_in:  in data port;
 			sensor_out: out data port;
 	end SensorTelemetryRecorder;
 	thread implementation SensorTelemetryRecorder.impl
@@ -349,12 +381,12 @@ public
 	thread TelemetryThread
 	-- Bundles sensor data with data from other systems of the UAV to send to the ground station
 		features
-			telemetry_in: in data port;
-			sensor_in: in data port;
-			telemetry_out: out data port;
+			telemetry_in: 	in data port;
+			sensor_in: 		in data port;
+			telemetry_out: 	out data port;
 		flows 
 			external_telemetry_flow: flow path telemetry_in -> telemetry_out;
-			sensor_telemetry_flow: flow path sensor_in -> telemetry_out;
+			sensor_telemetry_flow:	 flow path sensor_in -> telemetry_out;
 	end TelemetryThread;
 	thread implementation TelemetryThread.impl
 		properties
@@ -370,7 +402,7 @@ public
 	-- Listens for commands from the ground station and broadcasts them to the Communication Interface
 	-- Listens periodically?
 		features
-			commands_in: in data port;
+			commands_in:  in data port;
 			commands_out: out data port;
 		flows
 			commands_flow: flow path commands_in -> commands_out;

@@ -125,7 +125,7 @@
           <seg>c5</seg>
         </bo>
         <bendpoints>
-          <point x="948.0" y="622.0"/>
+          <point x="948.0000610351562" y="622.0"/>
         </bendpoints>
       </element>
       <element uuid="8c935846-d986-45ce-9f5d-06374e332fd3" manual="true">
@@ -140,7 +140,7 @@
           <seg>c6</seg>
         </bo>
         <bendpoints>
-          <point x="341.0" y="606.0"/>
+          <point x="340.9999694824219" y="606.0"/>
         </bendpoints>
       </element>
       <element uuid="ef20609f-d897-4461-a8de-686782878466" manual="true">
@@ -155,7 +155,7 @@
           <seg>c7</seg>
         </bo>
         <bendpoints>
-          <point x="449.0" y="302.0"/>
+          <point x="448.9999694824219" y="301.99993896484375"/>
         </bendpoints>
       </element>
       <element uuid="6302be76-f93b-4425-bbc8-cb2c685790fd" manual="true">
@@ -187,7 +187,131 @@
           <seg>feature</seg>
           <seg>com_bus</seg>
         </bo>
-        <position x="1429.8984413146973" y="350.0"/>
+        <position x="1979.8984413146973" y="350.0"/>
+      </element>
+      <element uuid="b3f4cd85-665f-4d48-a064-703f707cff6e" manual="true">
+        <bo>
+          <seg>mode</seg>
+          <seg>Automatic</seg>
+        </bo>
+        <position x="440.0" y="440.0"/>
+        <size width="130.0" height="36.0"/>
+      </element>
+      <element uuid="2e501539-932b-4bbf-a58d-9159a67a9cf6" manual="true">
+        <bo>
+          <seg>mode</seg>
+          <seg>FailSafe</seg>
+        </bo>
+        <position x="220.0" y="570.0"/>
+        <size width="130.0" height="36.0"/>
+      </element>
+      <element uuid="9371a0d4-4217-4e9a-bb8b-7ddfbbc627c0" manual="true">
+        <bo>
+          <seg>mode</seg>
+          <seg>Manual</seg>
+        </bo>
+        <position x="30.0" y="440.0"/>
+        <size width="130.0" height="36.0"/>
+      </element>
+      <element uuid="1439dccc-aada-4e6d-89ae-3fbaf4a95a55" manual="true">
+        <bo>
+          <seg>mode</seg>
+          <seg>PreFlight</seg>
+        </bo>
+        <position x="220.0" y="220.0"/>
+        <size width="130.0" height="44.0"/>
+      </element>
+      <element uuid="43503980-5da4-41e0-a3d5-e911fa5393d8" manual="true">
+        <bo>
+          <seg>mode</seg>
+          <seg>Standby</seg>
+        </bo>
+        <position x="220.0" y="330.0"/>
+        <size width="130.0" height="36.0"/>
+      </element>
+      <element uuid="89ab8777-777b-41a1-b6d3-f8d3c409d740" manual="true">
+        <element uuid="72e74bed-af2e-4c64-87b8-5ececbffe314" manual="true">
+          <bo>
+            <seg>tag</seg>
+            <seg>mtt</seg>
+          </bo>
+        </element>
+        <bo>
+          <seg>mt</seg>
+          <seg>T0</seg>
+        </bo>
+      </element>
+      <element uuid="c70ff1c7-a1fc-48e4-8a3f-7313cce649d0" manual="true">
+        <element uuid="8a6fdfac-096b-4260-b2fa-b2c999466f4f" manual="true">
+          <bo>
+            <seg>tag</seg>
+            <seg>mtt</seg>
+          </bo>
+        </element>
+        <bo>
+          <seg>mt</seg>
+          <seg>T1</seg>
+        </bo>
+      </element>
+      <element uuid="2dfd9db7-1340-421f-bf5e-52af73fb2485" manual="true">
+        <element uuid="dc5d712c-a587-4015-b2e8-e61878773ec8" manual="true">
+          <bo>
+            <seg>tag</seg>
+            <seg>mtt</seg>
+          </bo>
+        </element>
+        <bo>
+          <seg>mt</seg>
+          <seg>T2</seg>
+        </bo>
+      </element>
+      <element uuid="dfe778ec-a349-42c3-b2fd-0ac0479e79c9" manual="true">
+        <element uuid="ebc51e46-1ed1-4198-92ab-362b3d6fec5d" manual="true">
+          <bo>
+            <seg>tag</seg>
+            <seg>mtt</seg>
+          </bo>
+        </element>
+        <bo>
+          <seg>mt</seg>
+          <seg>T3</seg>
+        </bo>
+      </element>
+      <element uuid="4ecec25d-4fa7-4106-a5ba-09b5d2afba29" manual="true">
+        <element uuid="09c84dcc-ffc2-4833-9169-4615ed71a250" manual="true">
+          <bo>
+            <seg>tag</seg>
+            <seg>mtt</seg>
+          </bo>
+        </element>
+        <bo>
+          <seg>mt</seg>
+          <seg>T4</seg>
+        </bo>
+      </element>
+      <element uuid="6fdd6a17-58ce-436f-994d-7c090da50cd6" manual="true">
+        <element uuid="1ecd1336-62c6-473c-8f22-86f8f4571fc0" manual="true">
+          <bo>
+            <seg>tag</seg>
+            <seg>mtt</seg>
+          </bo>
+        </element>
+        <bo>
+          <seg>mt</seg>
+          <seg>T5</seg>
+        </bo>
+      </element>
+      <element uuid="5a7bab6d-b8f8-4225-9a44-04fbdc3b778f" manual="true">
+        <element uuid="1ee5cd50-2b66-483b-9a91-181e77d37f0e" manual="true">
+          <bo>
+            <seg>tag</seg>
+            <seg>mtt</seg>
+          </bo>
+        </element>
+        <bo>
+          <seg>mt</seg>
+          <seg>T6</seg>
+        </bo>
       </element>
       <element uuid="e029d944-0bf6-4d3c-b526-3e470411fd77" manual="true">
         <bo>
@@ -223,8 +347,8 @@
           </bo>
           <position x="50.0" y="132.0"/>
           <bendpoints>
-            <point x="1210.0" y="242.0"/>
-            <point x="1210.0" y="262.0"/>
+            <point x="1210.000244140625" y="242.00001525878906"/>
+            <point x="1210.000244140625" y="262.0"/>
           </bendpoints>
         </element>
         <element uuid="f44fe00f-6a15-4fb0-8a33-d234dffdf308" manual="true">
@@ -245,7 +369,7 @@
           <seg>subcomponent</seg>
           <seg>com_device</seg>
         </bo>
-        <position x="1320.0" y="220.0"/>
+        <position x="1870.0" y="220.0"/>
         <size width="130.0" height="280.0"/>
       </element>
       <element uuid="28c64506-9672-4428-9e8b-4fa276d913c2" manual="true">
@@ -285,8 +409,8 @@
             <seg>c3</seg>
           </bo>
           <bendpoints>
-            <point x="876.0" y="298.0"/>
-            <point x="1027.0" y="284.0"/>
+            <point x="876.0" y="298.0000305175781"/>
+            <point x="1027.0003662109375" y="284.0000305175781"/>
           </bendpoints>
         </element>
         <element uuid="5e8047fa-0cd3-40b9-b32a-887426683155" manual="true">
@@ -500,7 +624,7 @@
           <seg>subcomponent</seg>
           <seg>communication_interface</seg>
         </bo>
-        <position x="780.0" y="120.0"/>
+        <position x="1330.0" y="120.0"/>
         <size width="500.0" height="390.0"/>
       </element>
       <element uuid="8f5ce314-9cd6-4d11-b01a-f3017ae72f87" manual="true">
@@ -523,7 +647,7 @@
           <seg>subcomponent</seg>
           <seg>cpu</seg>
         </bo>
-        <position x="1260.0" y="40.0"/>
+        <position x="1810.0" y="40.0"/>
         <size width="236.0" height="61.0"/>
       </element>
       <element uuid="a028949d-cd62-418c-bfc9-01ded7f37554" manual="true">
@@ -546,20 +670,20 @@
             <seg>flow_specification</seg>
             <seg>commands_flow</seg>
           </bo>
-          <position x="137.1588592529297" y="52.0"/>
+          <position x="137.0" y="52.0"/>
         </element>
         <element uuid="bc64b119-4a07-44f0-92e7-d1fda3b5935d" manual="true">
           <bo>
             <seg>flow_specification</seg>
             <seg>telemetry_flow</seg>
           </bo>
-          <position x="137.62369537353516" y="97.0"/>
+          <position x="138.0" y="97.0"/>
         </element>
         <bo>
           <seg>subcomponent</seg>
           <seg>ground_station</seg>
         </bo>
-        <position x="10.0" y="70.0"/>
+        <position x="560.0" y="70.0"/>
         <size width="188.0" height="130.0"/>
       </element>
       <element uuid="94803e90-a912-4716-a63b-4f720d224a99" manual="true">
@@ -661,7 +785,7 @@
           <seg>subcomponent</seg>
           <seg>health_and_recorder</seg>
         </bo>
-        <position x="530.0" y="590.0"/>
+        <position x="1080.0" y="590.0"/>
         <size width="417.0" height="250.0"/>
       </element>
       <element uuid="a3f00264-6824-45e6-aef5-05000818afcb" manual="true">
@@ -677,13 +801,13 @@
             <seg>flow_specification</seg>
             <seg>sensor_flow</seg>
           </bo>
-          <position x="45.63671875" y="72.0"/>
+          <position x="46.0" y="72.0"/>
         </element>
         <bo>
           <seg>subcomponent</seg>
           <seg>navio2</seg>
         </bo>
-        <position x="30.0" y="440.0"/>
+        <position x="580.0" y="440.0"/>
         <size width="96.0" height="110.0"/>
       </element>
       <element uuid="1b6fa349-e8d6-4c30-92cd-203add775f71" manual="true">
@@ -735,7 +859,7 @@
             <seg>c9</seg>
           </bo>
           <bendpoints>
-            <point x="366.0" y="320.0"/>
+            <point x="365.9999694824219" y="319.99993896484375"/>
           </bendpoints>
         </element>
         <element uuid="cfb72c3f-1b1e-4ab4-9c71-964ae522bbf1" manual="true" dockArea="left">
@@ -798,7 +922,7 @@
           <seg>subcomponent</seg>
           <seg>sensor_driver</seg>
         </bo>
-        <position x="200.0" y="340.0"/>
+        <position x="750.0" y="340.0"/>
         <size width="380.0" height="230.0"/>
       </element>
       <element uuid="40896bae-352d-4475-8901-75e1cdf6f5de" manual="true">
@@ -938,7 +1062,7 @@
               <seg>feature</seg>
               <seg>telemetry_in</seg>
             </bo>
-            <position x="92.78125" y="20.00000000000003"/>
+            <position x="92.78125" y="20.0"/>
           </element>
           <element uuid="c1d46d50-2e35-4ae0-af1a-d858bbe293b5" manual="true" dockArea="left">
             <bo>
@@ -970,22 +1094,22 @@
           <seg>subcomponent</seg>
           <seg>telemetry</seg>
         </bo>
-        <position x="250.0" y="30.0"/>
+        <position x="800.0" y="30.0"/>
         <size width="400.0" height="290.0"/>
       </element>
       <bo>
         <seg>classifier</seg>
         <seg>RaspberryContainer.impl</seg>
       </bo>
-      <position x="60.0" y="70.0"/>
-      <size width="1496.0" height="870.0"/>
+      <position x="40.0" y="70.0"/>
+      <size width="2046.0" height="870.0"/>
     </element>
     <bo>
       <seg>package</seg>
       <seg>raspContainer</seg>
     </bo>
-    <position x="-210.0" y="-160.0"/>
-    <size width="1696.0" height="980.0"/>
+    <position x="-740.0" y="-160.0"/>
+    <size width="2226.0" height="980.0"/>
   </element>
   <config type="package" connectionPrimaryLabelsVisible="false">
     <enabledAadlProperties/>
