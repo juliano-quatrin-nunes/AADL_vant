@@ -1,0 +1,21 @@
+package mainSystem
+public
+	with EstimateAndCtrl;
+	with raspContainer;
+	with interSystemCom;
+	
+	system MainSystem
+	end MainSystem;
+	
+	system implementation MainSystem.impl
+		subcomponents
+			jetson_system: system EstimateAndCtrl::EstimateAndCtrl.impl;
+			rasp_system: system raspContainer::RaspberryContainer.impl;
+			
+			ISC: bus interSystemCom::communicationInterfaceBus.impl;
+		connections
+			c1: bus access jetson_system.ISC <-> ISC;
+			c2: bus access rasp_system.com_bus <-> ISC;
+	end MainSystem.impl;
+	
+end mainSystem;
