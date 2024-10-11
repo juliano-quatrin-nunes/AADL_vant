@@ -12,10 +12,23 @@ public
 			jetson_system: system EstimateAndCtrl::EstimateAndCtrl.impl;
 			rasp_system: system raspContainer::RaspberryContainer.impl;
 			
+			navio2: 	device raspContainer::Navio2.impl;
+			actuators: 	device Actuators.impl;
+			
 			ISC: bus interSystemCom::communicationInterfaceBus.impl;
 		connections
 			c1: bus access jetson_system.ISC <-> ISC;
 			c2: bus access rasp_system.com_bus <-> ISC;
+			c3: port navio2.sensors_out -> rasp_system.navio2_in;
+			c4: port jetson_system.control_out -> actuators.control_signal;
 	end MainSystem.impl;
+	
+	device Actuators
+		features
+			control_signal: in data port;
+	end Actuators;
+	
+	device implementation Actuators.impl
+	end Actuators.impl;
 	
 end mainSystem;

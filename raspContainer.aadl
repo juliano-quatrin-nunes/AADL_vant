@@ -5,7 +5,8 @@ public
 	
 	system raspberryContainer
 		features
-			com_bus: requires bus access interSystemCom::communicationInterfaceBus.impl;		
+			com_bus: requires bus access interSystemCom::communicationInterfaceBus.impl;	
+			navio2_in: in data port;	
 	end raspberryContainer;
 	
 	
@@ -14,7 +15,7 @@ public
 		subcomponents
 			cpu: processor Raspberry.impl;
 			
-			navio2:			device Navio2.impl;
+--			navio2:			device Navio2.impl;
 			ground_station:	device GroundStation.impl;
 			com_device:		device CommunicationDevice.impl;
 			
@@ -24,14 +25,14 @@ public
 			health_and_recorder:		process HealthMonitorAndDataRecorder.impl;
 			
 		connections
-			c1:  port navio2.sensors_out -> sensor_driver.navio2_sensor_in;
+			c1:  port navio2_in -> sensor_driver.navio2_sensor_in;
 			c2:  port health_and_recorder.health_out -> communication_interface.health_in;
 			c3:  port telemetry.ground_commands_out -> communication_interface.ground_commands_in;
 			c4:  port sensor_driver.sensor_communication_out -> communication_interface.sensor_in;
 			c5:  port communication_interface.record_out -> health_and_recorder.record_external_in;
 			c6:  port sensor_driver.sensor_record_out -> health_and_recorder.record_sensor_in;
 			c7:  port sensor_driver.sensor_telemetry_out -> telemetry.telemetry_sensor_in;
-			c8:  port navio2.sensors_out -> sensor_driver.navio2_sensor_in;
+			c8:  port navio2_in -> sensor_driver.navio2_sensor_in;
 			c9:  port ground_station.commands_out -> telemetry.ground_commands_in;
 			c10: port telemetry.telemetry_out -> ground_station.telemetry_in;
 			c11: port communication_interface.telemetry_out -> telemetry.telemetry_external_in;
@@ -41,15 +42,15 @@ public
 			c15: port communication_interface.com_out -> com_device.com_in;	
 		
 		flows
-			sensor_flow: end to end flow 
-				navio2.sensor_flow -> c1 -> sensor_driver.sensor_flow -> c4 -> 
-				communication_interface.sensor_flow -> c15 -> com_device.sensor_flow;
+--			sensor_flow: end to end flow 
+--				navio2.sensor_flow -> c1 -> sensor_driver.sensor_flow -> c4 -> 
+--				communication_interface.sensor_flow -> c15 -> com_device.sensor_flow;
 			commands_flow: end to end flow
 				ground_station.commands_flow -> c9 -> telemetry.commands_flow -> c3 -> 
 				communication_interface.commands_flow -> c15 -> com_device.commands_flow;
-			sensor_telemetry_flow: end to end flow 
-				navio2.sensor_flow -> c1 -> sensor_driver.sensor_telemetry_flow -> c7 -> 
-				telemetry.sensor_telemetry_flow -> c10 -> ground_station.telemetry_flow;
+--			sensor_telemetry_flow: end to end flow 
+--				navio2.sensor_flow -> c1 -> sensor_driver.sensor_telemetry_flow -> c7 -> 
+--				telemetry.sensor_telemetry_flow -> c10 -> ground_station.telemetry_flow;
 			external_telemetry_flow: end to end flow 
 				com_device.telemetry_flow -> c14 -> communication_interface.telemetry_flow -> c11 -> 
 				telemetry.external_telemetry_flow -> c10 -> ground_station.telemetry_flow;

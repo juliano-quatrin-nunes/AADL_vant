@@ -66,6 +66,7 @@ public
 	system EstimateAndCtrl
 		features
 			ISC: requires bus access interSystemCom::communicationInterfaceBus.impl;
+			control_out: out data port;
 
 	end EstimateAndCtrl;
 
@@ -82,6 +83,7 @@ public
 			C3: bus access ISC_Interface.ISC_bus_interface <-> ISC;
 			C4: bus access cpu.ISC_bus_interface <-> ISC;
 			C5: port ISC_Interface.isc_data_out -> main.isc_data_in;
+			c6: port main.control_out -> control_out;
 	
 		flows	
 	    on_end_to_end: end to end flow hp_sensors.F_SRC -> C1 -> 
@@ -96,6 +98,7 @@ public
 --									   isc_device_conn_main -> 
 --									   ISC_Interface.on_flow_snk 
 --									   {latency => 12ms .. 12ms;};
+			
 		properties
 			Actual_Processor_Binding => (reference (cpu)) applies to main;
 
@@ -115,6 +118,8 @@ public
 
 			isc_data_out: out data port;
 			isc_data_in: in data port;
+			
+			control_out: out data port;
 		flows
 			F1: flow path hp_data_in -> isc_data_out {latency => 10ms .. 10ms;};
 			
@@ -144,6 +149,7 @@ public
 			C13: port isc_data_in -> network_gatekeeper.isc_data_in;
 			C14: port network_gatekeeper.isc_send_data -> state_machine.read_state_trans;
 			C15: port state_machine.send_state_trans -> network_gatekeeper.isc_read_data;
+			c16: port auto_ctrl.send_ctrl_inputs -> control_out;
 		flows
 			--F1: flow path hp_data_in -> isc_data_out{latency => 10ms .. 10ms;};
 			F1: flow path hp_data_in -> C1 ->
