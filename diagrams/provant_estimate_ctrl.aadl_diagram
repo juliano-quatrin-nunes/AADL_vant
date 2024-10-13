@@ -14,55 +14,8 @@
           <seg>C1</seg>
         </bo>
         <bendpoints>
-          <point x="196.99998474121094" y="283.0"/>
-          <point x="196.99998474121094" y="331.0"/>
-        </bendpoints>
-      </element>
-      <element uuid="8188a00a-5754-4c65-a3ab-88863580844e" manual="true">
-        <element uuid="1dbae959-c487-4f03-84ce-69407bb1e770" manual="true">
-          <bo>
-            <seg>tag</seg>
-            <seg>unidirectional</seg>
-          </bo>
-        </element>
-        <bo>
-          <seg>connection</seg>
-          <seg>C2</seg>
-        </bo>
-        <bendpoints>
-          <point x="1753.0" y="501.0"/>
-          <point x="1753.0" y="422.0"/>
-        </bendpoints>
-      </element>
-      <element uuid="b689fa38-d39d-417a-b36a-3cc6082e8e72" manual="true">
-        <bo>
-          <seg>connection</seg>
-          <seg>C3</seg>
-        </bo>
-      </element>
-      <element uuid="c2fe13fd-c755-413d-88a4-f1e930378b70" manual="true">
-        <bo>
-          <seg>connection</seg>
-          <seg>C4</seg>
-        </bo>
-        <bendpoints>
-          <point x="1911.0" y="882.0"/>
-        </bendpoints>
-      </element>
-      <element uuid="3e169a10-ccbf-4aa1-83af-00b909eef45f" manual="true">
-        <element uuid="dc3b46ab-0311-4797-94b0-03b2d1fc6bcc" manual="true">
-          <bo>
-            <seg>tag</seg>
-            <seg>unidirectional</seg>
-          </bo>
-        </element>
-        <bo>
-          <seg>connection</seg>
-          <seg>C5</seg>
-        </bo>
-        <bendpoints>
-          <point x="1708.0" y="372.0"/>
-          <point x="1708.0" y="456.0"/>
+          <point x="197.0" y="283.0"/>
+          <point x="197.0" y="331.0"/>
         </bendpoints>
       </element>
       <element uuid="aab9ea13-8198-4c07-87d8-2d8bede55a50" manual="true">
@@ -107,50 +60,6 @@
         <position x="30.0" y="140.0"/>
         <size width="134.0" height="80.0"/>
       </element>
-      <element uuid="ee13bb03-6ec0-480c-b48b-1aa1cc16b5c4" manual="true">
-        <bo>
-          <seg>subcomponent</seg>
-          <seg>ISC</seg>
-        </bo>
-        <position x="1860.0" y="580.0"/>
-        <size width="122.0" height="64.0"/>
-      </element>
-      <element uuid="9eb88c2e-e850-4bbe-bb4e-b75ae05ef1cb" manual="true">
-        <element uuid="bb344af2-3cb0-4e77-957f-dfd1b9803e23" manual="true" dockArea="bottom">
-          <bo>
-            <seg>feature</seg>
-            <seg>ISC_bus_interface</seg>
-          </bo>
-          <position y="146.0"/>
-        </element>
-        <element uuid="14ac74d9-d691-47fe-82e0-7e3e62fad6d9" manual="true" dockArea="left">
-          <bo>
-            <seg>feature</seg>
-            <seg>isc_data_in</seg>
-          </bo>
-          <position y="90.0"/>
-        </element>
-        <element uuid="c7a2a329-34d8-4227-9642-ec03da0f7285" manual="true" dockArea="left">
-          <bo>
-            <seg>feature</seg>
-            <seg>isc_data_out</seg>
-          </bo>
-          <position y="40.0"/>
-        </element>
-        <element uuid="17bd37cc-1e6a-44c6-ae28-ba8c79af9981" manual="true">
-          <bo>
-            <seg>flow_specification</seg>
-            <seg>F_SNK</seg>
-          </bo>
-          <position x="50.0" y="127.0"/>
-        </element>
-        <bo>
-          <seg>subcomponent</seg>
-          <seg>ISC_Interface</seg>
-        </bo>
-        <position x="1790.0" y="220.0"/>
-        <size width="190.0" height="170.0"/>
-      </element>
       <element uuid="a74e04b2-732e-4fb4-9b20-005380a84d27" manual="true">
         <element uuid="453d7a8c-d79f-49fb-9dbf-2f63c1b72add" manual="true">
           <element uuid="8633595d-4874-4450-b180-d65b1dd8b8e6" manual="true">
@@ -176,7 +85,7 @@
             <seg>C10</seg>
           </bo>
           <bendpoints>
-            <point x="320.9999694824219" y="570.0"/>
+            <point x="321.0" y="570.0"/>
           </bendpoints>
         </element>
         <element uuid="c7689dd6-b84e-4cf4-8d32-51888eadc4ca" manual="true">
@@ -211,22 +120,6 @@
           </bo>
           <bendpoints>
             <point x="1121.0" y="568.0"/>
-          </bendpoints>
-        </element>
-        <element uuid="65edd3b7-b8f2-4bc2-9b1e-6bb0d48fd538" manual="true">
-          <element uuid="6301f64c-89a4-4546-8311-5d973b7d39f2" manual="true">
-            <bo>
-              <seg>tag</seg>
-              <seg>unidirectional</seg>
-            </bo>
-          </element>
-          <bo>
-            <seg>connection</seg>
-            <seg>C13</seg>
-          </bo>
-          <bendpoints>
-            <point x="1562.0" y="458.0"/>
-            <point x="1563.0" y="530.0"/>
           </bendpoints>
         </element>
         <element uuid="24803cca-40a3-4ed6-9e9e-3b8386597e04" manual="true">
@@ -332,7 +225,7 @@
             <seg>C6</seg>
           </bo>
           <bendpoints>
-            <point x="998.9999389648438" y="521.0"/>
+            <point x="999.0" y="521.0"/>
           </bendpoints>
         </element>
         <element uuid="e7c4bfd5-62a2-4dc6-b71c-e91290702460" manual="true">
@@ -349,22 +242,6 @@
           <bendpoints>
             <point x="878.0" y="786.0"/>
             <point x="938.0" y="787.0"/>
-          </bendpoints>
-        </element>
-        <element uuid="cfd768e8-a300-47ee-9edd-13e214fec2a8" manual="true">
-          <element uuid="bb47475c-8df7-46b1-b580-41c3eabb5f18" manual="true">
-            <bo>
-              <seg>tag</seg>
-              <seg>unidirectional</seg>
-            </bo>
-          </element>
-          <bo>
-            <seg>connection</seg>
-            <seg>C8</seg>
-          </bo>
-          <bendpoints>
-            <point x="1607.0" y="574.0"/>
-            <point x="1607.0" y="501.0"/>
           </bendpoints>
         </element>
         <element uuid="1ca55943-8fa3-4d66-93f8-219974ea620b" manual="true">
@@ -388,26 +265,6 @@
             <seg>hp_data_in</seg>
           </bo>
           <position y="110.0"/>
-        </element>
-        <element uuid="027def65-cf8d-4bd4-80f8-a05ccb03c154" manual="true" dockArea="right">
-          <bo>
-            <seg>feature</seg>
-            <seg>isc_data_in</seg>
-          </bo>
-          <position x="1370.5455780029297" y="234.0"/>
-        </element>
-        <element uuid="b946fafd-c274-415a-973f-cefe2d0f3b8e" manual="true" dockArea="right">
-          <bo>
-            <seg>feature</seg>
-            <seg>isc_data_out</seg>
-          </bo>
-          <position x="1362.3880233764648" y="279.0"/>
-        </element>
-        <element uuid="4970f89d-bb24-448e-a791-3183dc9a2ff6" manual="true">
-          <bo>
-            <seg>flow_specification</seg>
-            <seg>F1</seg>
-          </bo>
         </element>
         <element uuid="8eb45707-4da3-4d92-aa8b-9687747aed93" manual="true">
           <bo>
@@ -519,14 +376,14 @@
               <seg>feature</seg>
               <seg>isc_data_in</seg>
             </bo>
-            <position x="170.54557800292923" y="79.0"/>
+            <position x="170.5455780029297" y="79.0"/>
           </element>
           <element uuid="2a65e97c-4aa9-4402-9e8f-8bb0503648da" manual="true" dockArea="right">
             <bo>
               <seg>feature</seg>
               <seg>isc_data_out</seg>
             </bo>
-            <position x="162.3880233764644" y="124.0"/>
+            <position x="162.38802337646484" y="124.0"/>
           </element>
           <element uuid="085cfc33-6296-4bf5-a1cc-d16bdad6579e" manual="true" dockArea="left">
             <bo>
@@ -565,7 +422,7 @@
             <seg>network_gatekeeper</seg>
           </bo>
           <position x="1020.0" y="230.0"/>
-          <size width="249.99999999999955" height="190.0"/>
+          <size width="250.0" height="190.0"/>
         </element>
         <element uuid="8c54057c-e769-4145-926e-7b5744f7976b" manual="true">
           <element uuid="894f8e79-8041-4d1e-8ee4-3ef0f277ac38" manual="true" dockArea="right">
@@ -713,7 +570,7 @@
             <seg>state_machine</seg>
           </bo>
           <position x="1078.0" y="50.0"/>
-          <size width="209.99999999999977" height="135.0"/>
+          <size width="210.0" height="135.0"/>
         </element>
         <element uuid="2a6f76b2-aa7f-4aef-b3d0-e628c0d387b3" manual="true">
           <bo>

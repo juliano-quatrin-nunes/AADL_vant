@@ -49,23 +49,25 @@ public
 	device implementation hp_sensors.impl
 	end hp_sensors.impl;
 	
-	device ISC_Interface
+	device actuators
 		features
-			isc_data_in: in data port;
-			ISC_bus_interface: requires bus access interSystemCom::communicationInterfaceBus.impl;
-			isc_data_out: out data port;
+			control_signal: in data port;
 		flows
-			F_SNK: flow sink isc_data_in {latency => 600us .. 600us;};
-	end ISC_Interface;
-
-	device implementation ISC_Interface.impl
-	end ISC_Interface.impl;
-
+			control_sink: flow sink control_signal {latency => 1ms .. 1ms;};
+	end actuators;
+	
+	device implementation actuators.impl
+	end actuators.impl;
+	
 	-- SYSTEMS
 
 	system EstimateAndCtrl
 		features
-			ISC: requires bus access interSystemCom::communicationInterfaceBus.impl;
+			ISC: 			requires bus access interSystemCom::communicationInterfaceBus.impl;
+			ISC_data_port: 	in out data port;
+		flows
+			hp_sensor: 		flow source ISC_data_port;
+			control_sink: 	flow sink ISC_data_port;	
 
 	end EstimateAndCtrl;
 
@@ -73,20 +75,21 @@ public
 		subcomponents
 			main: process main.impl;
 			hp_sensors: device hp_sensors.impl;
+			actuators: device actuators.impl;
 			cpu: processor Jetson.impl;
-			ISC_Interface: device ISC_Interface.impl;
 
 		connections
 			C1: port hp_sensors.hp_data -> main.hp_data_in;
-			C2: port main.isc_data_out -> ISC_Interface.isc_data_in;
-			C3: bus access ISC_Interface.ISC_bus_interface <-> ISC;
+			C2: port main.ISC <-> ISC_data_port;
+			C3: port main.actuators -> actuators.control_signal;
 			C4: bus access cpu.ISC_bus_interface <-> ISC;
-			C5: port ISC_Interface.isc_data_out -> main.isc_data_in;
 	
 		flows	
-	    on_end_to_end: end to end flow hp_sensors.F_SRC -> C1 -> 
+	    	hp_sensor: flow source hp_sensors.F_SRC -> C1 -> 
 	   								  main.F1 -> C2 ->
-	   								  ISC_Interface.F_SNK {latency => 12ms .. 12ms;};
+	   								  ISC_data_port {latency => 12ms .. 12ms;};
+	   		control_sink: flow sink ISC_data_port -> c2 -> main.control_flow -> c3 -> actuators.control_sink;
+	   		
 	   								  
 --		on_end_to_end: end to end flow hp_sensors.on_flow_src -> 
 --									   hp_sensors_conn_main -> 
@@ -112,11 +115,11 @@ public
 	process main
 		features
 			hp_data_in: in data port hp_data.impl;
-
-			isc_data_out: out data port;
-			isc_data_in: in data port;
+			actuators:  out data port;
+			ISC: 		in out data port;
 		flows
-			F1: flow path hp_data_in -> isc_data_out {latency => 10ms .. 10ms;};
+			F1: flow path hp_data_in -> ISC {latency => 10ms .. 10ms;};
+			control_flow: flow path ISC -> actuators;
 			
 	end main;
 
@@ -136,22 +139,25 @@ public
 			C5: port state_estimator.send_state_vec -> auto_ctrl.read_state_vec;
 			C6: port state_estimator.send_state_vec -> ref_ctrl.read_state_vec;
 			C7: port ref_ctrl.send_ref_signal -> auto_ctrl.ref_signal;
-			C8: port network_gatekeeper.isc_data_out -> isc_data_out;
+			C8: port network_gatekeeper.isc_data_out -> ISC;
 			C9: port network_gatekeeper.isc_send_data -> state_estimator.read_general_sensors;
 			C10: port hp_data_in -> data_rec.hp_data_in;
 			C11: port auto_ctrl.send_ctrl_inputs -> network_gatekeeper.isc_read_data;
 			C12: port network_gatekeeper.isc_send_data -> ref_ctrl.read_active_ctrl;
-			C13: port isc_data_in -> network_gatekeeper.isc_data_in;
+			C13: port ISC -> network_gatekeeper.isc_data_in;
 			C14: port network_gatekeeper.isc_send_data -> state_machine.read_state_trans;
 			C15: port state_machine.send_state_trans -> network_gatekeeper.isc_read_data;
+			C16: port auto_ctrl.send_ctrl_inputs -> actuators;
 		flows
 			--F1: flow path hp_data_in -> isc_data_out{latency => 10ms .. 10ms;};
-			F1: flow path hp_data_in -> C1 ->
+			F1:			 	flow path hp_data_in -> C1 ->
 						  state_estimator.F1 -> C5 ->
 			              auto_ctrl.F1 -> C11 ->
-			              network_gatekeeper.F1 -> C8 -> isc_data_out
+			              network_gatekeeper.F1 -> C8 -> ISC
 			              {latency => 10ms .. 10ms;};
-		
+			              
+			control_flow:	flow path ISC -> c13 -> network_gatekeeper.F2 -> c12 -> 
+				ref_ctrl.F3 -> c7 -> auto_ctrl.F2 -> c16 -> actuators;
 			
 			
 		modes
@@ -165,7 +171,7 @@ public
 				ref_ctrl.read_state_vec]-> RefFrameGen;
 			main_impl_new_transition3: RefFrameGen -[auto_ctrl.read_data_rec, auto_ctrl.read_state_vec,
 				auto_ctrl.ref_signal]-> ActuationCtrlCmd;
-			main_impl_new_transition4: ActuationCtrlCmd -[isc_data_out]-> ReadSensors;
+			main_impl_new_transition4: ActuationCtrlCmd -[ISC]-> ReadSensors;
 			Unconfigured: initial mode;
 			Initializing: mode;
 			PreFlight: mode;
@@ -230,10 +236,6 @@ public
 	end auto_ctrl;
 
 	thread implementation auto_ctrl.impl
-		flows
-			F1: flow path read_state_vec -> send_ctrl_inputs {latency => 6ms .. 6ms;};
-			F2: flow path ref_signal -> send_ctrl_inputs {latency => 6ms .. 6ms;};
-			F3: flow path read_data_rec -> send_ctrl_inputs {latency => 6ms .. 6ms;};
 		properties
 			Dispatch_Protocol => Periodic;
 			Compute_Execution_Time => 3ms .. 4ms;
@@ -255,10 +257,6 @@ public
 	end ref_ctrl;
 
 	thread implementation ref_ctrl.impl
-		flows
-			F1: flow path read_state_vec -> send_ref_signal {latency => 1ms .. 1ms;};
-			F2: flow path read_data_rec -> send_ref_signal {latency => 1ms .. 1ms;};
-			F3: flow path read_active_ctrl -> send_ref_signal {latency => 1ms .. 1ms;};
 		properties
 			Dispatch_Protocol => Periodic;
 			Compute_Execution_Time => 1ms .. 1ms;
@@ -276,8 +274,6 @@ public
 	end data_recorder;
 
 	thread implementation data_recorder.impl
-		flows
-			F1: flow path hp_data_in -> data_out {latency => 500us .. 500us;};
 		properties
 			Dispatch_Protocol => Periodic;
 			Compute_Execution_Time => 2ms .. 3ms;

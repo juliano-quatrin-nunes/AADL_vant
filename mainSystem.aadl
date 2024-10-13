@@ -16,6 +16,10 @@ public
 		connections
 			c1: bus access jetson_system.ISC <-> ISC;
 			c2: bus access rasp_system.com_bus <-> ISC;
+			c3: port jetson_system.ISC_data_port <-> rasp_system.ISC_data_port;
+		
+		flows
+			sensor_to_control: end to end flow rasp_system.sensor_source -> c3 -> jetson_system.control_sink;
 	end MainSystem.impl;
 	
 end mainSystem;

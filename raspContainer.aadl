@@ -5,7 +5,12 @@ public
 	
 	system raspberryContainer
 		features
-			com_bus: requires bus access interSystemCom::communicationInterfaceBus.impl;		
+			com_bus: 		requires bus access interSystemCom::communicationInterfaceBus.impl;	
+			ISC_data_port: 	in out data port;	
+		flows
+			telemetry_sink:  	flow sink ISC_data_port;
+			sensor_source: 		flow source ISC_data_port;
+			commands_source:	flow source ISC_data_port;
 	end raspberryContainer;
 	
 	
@@ -16,7 +21,6 @@ public
 			
 			navio2:			device Navio2.impl;
 			ground_station:	device GroundStation.impl;
-			com_device:		device CommunicationDevice.impl;
 			
 			communication_interface:	process CommunicationInterface.impl;
 			sensor_driver:				process SensorDriver.impl;
@@ -36,23 +40,24 @@ public
 			c10: port telemetry.telemetry_out -> ground_station.telemetry_in;
 			c11: port communication_interface.telemetry_out -> telemetry.telemetry_external_in;
 			c12: bus access com_bus <-> cpu.com_bus;
-			c13: bus access com_bus <-> com_device.com_bus;
-			c14: port com_device.com_out -> communication_interface.com_in;
-			c15: port communication_interface.com_out -> com_device.com_in;	
+			c14: port ISC_data_port <-> communication_interface.ISC;
 		
 		flows
-			sensor_flow: end to end flow 
+			telemetry_sink: flow sink 
+				ISC_data_port -> c14 -> communication_interface.telemetry_flow -> c11 -> 
+				telemetry.external_telemetry_flow -> c10 -> ground_station.telemetry_flow;
+				
+			sensor_source: flow source 
 				navio2.sensor_flow -> c1 -> sensor_driver.sensor_flow -> c4 -> 
-				communication_interface.sensor_flow -> c15 -> com_device.sensor_flow;
-			commands_flow: end to end flow
+				communication_interface.sensor_flow -> c14 -> ISC_data_port;
+			
+			commands_source: flow source 
 				ground_station.commands_flow -> c9 -> telemetry.commands_flow -> c3 -> 
-				communication_interface.commands_flow -> c15 -> com_device.commands_flow;
+				communication_interface.commands_flow -> c14 -> ISC_data_port;
+			
 			sensor_telemetry_flow: end to end flow 
 				navio2.sensor_flow -> c1 -> sensor_driver.sensor_telemetry_flow -> c7 -> 
 				telemetry.sensor_telemetry_flow -> c10 -> ground_station.telemetry_flow;
-			external_telemetry_flow: end to end flow 
-				com_device.telemetry_flow -> c14 -> communication_interface.telemetry_flow -> c11 -> 
-				telemetry.external_telemetry_flow -> c10 -> ground_station.telemetry_flow;
 			
 		modes
 			PreFlight: 	initial mode;			
@@ -159,12 +164,11 @@ public
 			record_out: 		out data port;
 			sensor_in: 			in data port;
 			ground_commands_in:	in data port;
-			com_out: 			out data port;
-			com_in: 			in data port;
+			ISC: 				in out data port;
 		flows
-			sensor_flow: 	flow path sensor_in -> com_out;
-			commands_flow: 	flow path ground_commands_in -> com_out;
-			telemetry_flow: flow path com_in -> telemetry_out;
+			sensor_flow: 	flow path sensor_in -> ISC;
+			commands_flow: 	flow path ground_commands_in -> ISC;
+			telemetry_flow: flow path ISC -> telemetry_out;
 	end CommunicationInterface;
 	
 	process implementation CommunicationInterface.impl
@@ -173,21 +177,21 @@ public
 			telemetry_and_commands: thread TelemetryCommands.impl;
 			external_data_com: 		thread ExternalDataCom.impl;
 		connections
-			c1: port com_in -> telemetry_and_commands.external_telemetry_in;
-			c2: port com_in -> external_data_com.data_in;
-			c3: port sensor_com.sensor_out -> com_out;
-			c4: port telemetry_and_commands.ground_commands_out -> com_out;
+			c1: port ISC -> telemetry_and_commands.external_telemetry_in;
+			c2: port ISC -> external_data_com.data_in;
+			c3: port sensor_com.sensor_out -> ISC;
+			c4: port telemetry_and_commands.ground_commands_out -> ISC;
 			c5: port telemetry_and_commands.telemetry_out -> telemetry_out;
 			c6: port ground_commands_in -> telemetry_and_commands.ground_commands_in;
 			c7: port external_data_com.data_out -> record_out;
 			c8: port sensor_in -> sensor_com.sensor_in;
 		flows
 			sensor_flow: 	flow path 
-				sensor_in -> c8 -> sensor_com.flow_sensor -> c3 -> com_out;
+				sensor_in -> c8 -> sensor_com.flow_sensor -> c3 -> ISC;
 			commands_flow: 	flow path 
-				ground_commands_in -> c6 -> telemetry_and_commands.commands_flow -> c4 -> com_out;
+				ground_commands_in -> c6 -> telemetry_and_commands.commands_flow -> c4 -> ISC;
 			telemetry_flow: flow path 
-				com_in -> c1 -> telemetry_and_commands.telemetry_flow -> c5 -> telemetry_out;
+				ISC -> c1 -> telemetry_and_commands.telemetry_flow -> c5 -> telemetry_out;
 	end CommunicationInterface.impl;
 	
 	process SensorDriver
