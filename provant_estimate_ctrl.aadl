@@ -75,20 +75,18 @@ public
 		subcomponents
 			main: process main.impl;
 			hp_sensors: device hp_sensors.impl;
-			actuators: device actuators.impl;
 			cpu: processor Jetson.impl;
 
 		connections
 			C1: port hp_sensors.hp_data -> main.hp_data_in;
 			C2: port main.ISC <-> ISC_data_port;
-			C3: port main.actuators -> actuators.control_signal;
 			C4: bus access cpu.ISC_bus_interface <-> ISC;
 	
 		flows	
 	    	hp_sensor: flow source hp_sensors.F_SRC -> C1 -> 
 	   								  main.F1 -> C2 ->
 	   								  ISC_data_port {latency => 12ms .. 12ms;};
-	   		control_sink: flow sink ISC_data_port -> c2 -> main.control_flow -> c3 -> actuators.control_sink;
+	   		control_sink: flow sink ISC_data_port -> c2 -> main.control_flow;
 	   		
 	   								  
 --		on_end_to_end: end to end flow hp_sensors.on_flow_src -> 
@@ -115,11 +113,10 @@ public
 	process main
 		features
 			hp_data_in: in data port hp_data.impl;
-			actuators:  out data port;
 			ISC: 		in out data port;
 		flows
 			F1: flow path hp_data_in -> ISC {latency => 10ms .. 10ms;};
-			control_flow: flow path ISC -> actuators;
+			control_flow: flow sink ISC;
 			
 	end main;
 
@@ -147,7 +144,6 @@ public
 			C13: port ISC -> network_gatekeeper.isc_data_in;
 			C14: port network_gatekeeper.isc_send_data -> state_machine.read_state_trans;
 			C15: port state_machine.send_state_trans -> network_gatekeeper.isc_read_data;
-			C16: port auto_ctrl.send_ctrl_inputs -> actuators;
 		flows
 			--F1: flow path hp_data_in -> isc_data_out{latency => 10ms .. 10ms;};
 			F1:			 	flow path hp_data_in -> C1 ->
@@ -156,8 +152,8 @@ public
 			              network_gatekeeper.F1 -> C8 -> ISC
 			              {latency => 10ms .. 10ms;};
 			              
-			control_flow:	flow path ISC -> c13 -> network_gatekeeper.F2 -> c12 -> 
-				ref_ctrl.F3 -> c7 -> auto_ctrl.F2 -> c16 -> actuators;
+			control_flow:	flow sink ISC -> c13 -> network_gatekeeper.F2 -> c12 -> 
+				ref_ctrl.F3 -> c7 -> auto_ctrl.F2;
 			
 			
 		modes
@@ -231,7 +227,7 @@ public
 			ref_signal: in data port;
 		flows
 			F1: flow path read_state_vec -> send_ctrl_inputs {latency => 6ms .. 6ms;};
-			F2: flow path ref_signal -> send_ctrl_inputs {latency => 6ms .. 6ms;};
+			F2: flow sink ref_signal {latency => 6ms .. 6ms;};
 			F3: flow path read_data_rec -> send_ctrl_inputs {latency => 6ms .. 6ms;};
 	end auto_ctrl;
 
