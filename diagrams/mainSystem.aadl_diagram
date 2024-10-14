@@ -327,7 +327,7 @@
               <seg>feature</seg>
               <seg>ISC</seg>
             </bo>
-            <position x="995.7734375" y="280.0"/>
+            <position x="1175.7734375" y="280.0"/>
           </element>
           <element uuid="d35689fd-d75a-461b-a153-68d84ccc9320" manual="true">
             <element uuid="c8e1fac8-5167-4ae8-baf5-8d407b2af099" manual="true" dockArea="left">
@@ -376,6 +376,13 @@
                 <seg>flow_specification</seg>
                 <seg>F3</seg>
               </bo>
+            </element>
+            <element uuid="56eac4ee-65bd-4901-b2f0-952528c9ec22" manual="true">
+              <bo>
+                <seg>flow_specification</seg>
+                <seg>F4</seg>
+              </bo>
+              <position x="227.0" y="148.0"/>
             </element>
             <bo>
               <seg>subcomponent</seg>
@@ -595,7 +602,7 @@
             <seg>main</seg>
           </bo>
           <position x="270.0" y="50.0"/>
-          <size width="1030.0" height="630.0"/>
+          <size width="1210.0" height="630.0"/>
         </element>
         <bo>
           <seg>subcomponent</seg>

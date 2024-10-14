@@ -49,16 +49,6 @@ public
 	device implementation hp_sensors.impl
 	end hp_sensors.impl;
 	
-	device actuators
-		features
-			control_signal: in data port;
-		flows
-			control_sink: flow sink control_signal {latency => 1ms .. 1ms;};
-	end actuators;
-	
-	device implementation actuators.impl
-	end actuators.impl;
-	
 	-- SYSTEMS
 
 	system EstimateAndCtrl
@@ -66,8 +56,10 @@ public
 			ISC: 			requires bus access interSystemCom::communicationInterfaceBus.impl;
 			ISC_data_port: 	in out data port;
 		flows
-			hp_sensor: 		flow source ISC_data_port;
-			control_sink: 	flow sink ISC_data_port;	
+			hp_sensor: 					flow source ISC_data_port;
+			sensor_control_sink: 		flow sink ISC_data_port;	
+			control_telemetry_source: 	flow source ISC_data_port;
+			
 
 	end EstimateAndCtrl;
 
@@ -86,7 +78,8 @@ public
 	    	hp_sensor: flow source hp_sensors.F_SRC -> C1 -> 
 	   								  main.F1 -> C2 ->
 	   								  ISC_data_port {latency => 12ms .. 12ms;};
-	   		control_sink: flow sink ISC_data_port -> c2 -> main.control_flow;
+	   		sensor_control_sink: 		flow sink ISC_data_port -> c2 -> main.sensor_control_flow;
+	   		control_telemetry_source: 	flow source main.control_telemetry_flow -> c2 -> ISC_data_port;
 	   		
 	   								  
 --		on_end_to_end: end to end flow hp_sensors.on_flow_src -> 
@@ -115,8 +108,9 @@ public
 			hp_data_in: in data port hp_data.impl;
 			ISC: 		in out data port;
 		flows
-			F1: flow path hp_data_in -> ISC {latency => 10ms .. 10ms;};
-			control_flow: flow sink ISC;
+			F1: 					flow path hp_data_in -> ISC {latency => 10ms .. 10ms;};
+			sensor_control_flow: 	flow sink ISC;
+			control_telemetry_flow: flow source ISC;
 			
 	end main;
 
@@ -152,8 +146,10 @@ public
 			              network_gatekeeper.F1 -> C8 -> ISC
 			              {latency => 10ms .. 10ms;};
 			              
-			control_flow:	flow sink ISC -> c13 -> network_gatekeeper.F2 -> c12 -> 
+			sensor_control_flow:	flow sink ISC -> c13 -> network_gatekeeper.F2 -> c12 -> 
 				ref_ctrl.F3 -> c7 -> auto_ctrl.F2;
+			
+			control_telemetry_flow: flow source auto_ctrl.F4 -> C11 -> network_gatekeeper.F1 -> C8 -> ISC;
 			
 			
 		modes
@@ -229,6 +225,7 @@ public
 			F1: flow path read_state_vec -> send_ctrl_inputs {latency => 6ms .. 6ms;};
 			F2: flow sink ref_signal {latency => 6ms .. 6ms;};
 			F3: flow path read_data_rec -> send_ctrl_inputs {latency => 6ms .. 6ms;};
+			F4: flow source send_ctrl_inputs {latency => 6ms .. 6ms;};
 	end auto_ctrl;
 
 	thread implementation auto_ctrl.impl

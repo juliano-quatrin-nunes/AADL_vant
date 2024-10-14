@@ -1,0 +1,3 @@
+property set flowconn is
+	Link_Flow: aadlstring applies to (flow);
+end flowconn;

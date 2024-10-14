@@ -3,6 +3,7 @@ public
 	with EstimateAndCtrl;
 	with raspContainer;
 	with interSystemCom;
+	with flowConn;
 	
 	system MainSystem
 	end MainSystem;
@@ -18,7 +19,11 @@ public
 			c2: bus access rasp_system.com_bus <-> ISC;
 			c3: port jetson_system.ISC_data_port <-> rasp_system.ISC_data_port;
 		flows
-			sensor_to_control: end to end flow rasp_system.sensor_source -> c3 -> jetson_system.control_sink;
+			sensor_to_control: 		end to end flow 
+						rasp_system.sensor_source -> c3 -> jetson_system.sensor_control_sink 
+						{flowconn::Link_Flow => "control_to_telemetry";};
+			control_to_telemetry: 	end to end flow 
+						jetson_system.control_telemetry_source -> c3 -> rasp_system.telemetry_sink;
 			
 		properties
 			Actual_Connection_Binding => (reference (ISC)) applies to c3;
