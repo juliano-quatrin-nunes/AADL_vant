@@ -1,0 +1,72 @@
+Latency analysis with preference settings: asynchronous system/major partition frame/worst case as deadline/best case as empty queue/queuing latency enabled
+
+"Latency results for end-to-end flow 'rasp_system.sensor_telemetry_flow' of system 'MainSystem.impl' som_21(jetson_system.main.Unconfigured, rasp_system.PreFlight)"
+
+Result,Min Specified,Min Actual,Min Method,Max Specified,Max Actual,Max Method,Comments
+device rasp_system.navio2 (source sensor_flow),0.001ms,0.001ms,specified,0.01ms,0.01ms,specified
+connection navio2.sensors_out -> sensor_driver.process_data.rawData_in,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+thread rasp_system.sensor_driver.process_data (path sensor_flow),0.0ms,0.0ms,sampling,0.0ms,3.0ms,sampling,Best case 0 ms worst case 3.0ms (period) sampling delay
+thread rasp_system.sensor_driver.process_data (path sensor_flow),0.0ms,1.0ms,processing time,0.0ms,3.0ms,deadline
+connection sensor_driver.process_data.procData_out -> telemetry.telemetry_thread.sensor_in,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+thread rasp_system.telemetry.telemetry_thread (path sensor_telemetry_flow),0.0ms,0.0ms,sampling,0.0ms,497.0ms,sampling,Min: Best case: 0 ms sampling delay,Synchronous communication on same platform,Max: Worst case: Round up sampling delay to period 500.0ms
+thread rasp_system.telemetry.telemetry_thread (path sensor_telemetry_flow),0.0ms,10.0ms,processing time,0.0ms,500.0ms,deadline
+connection telemetry.telemetry_thread.telemetry_out -> ground_station.telemetry_in,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+device rasp_system.ground_station (sink telemetry_flow),0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+Latency Total,0.001ms,11.001ms,,0.01ms,1003.01ms
+Specified End To End Latency,,0.0ms,,,0.0ms
+End to end Latency Summary
+WARNING,Expected end to end latency is not specified
+
+
+
+"Latency results for end-to-end flow 'sensor_to_control' of system 'MainSystem.impl' som_21(jetson_system.main.Unconfigured, rasp_system.PreFlight)"
+
+Result,Min Specified,Min Actual,Min Method,Max Specified,Max Actual,Max Method,Comments
+device rasp_system.navio2 (source sensor_flow),0.001ms,0.001ms,specified,0.01ms,0.01ms,specified
+connection navio2.sensors_out -> sensor_driver.process_data.rawData_in,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+thread rasp_system.sensor_driver.process_data (path sensor_flow),0.0ms,0.0ms,sampling,0.0ms,3.0ms,sampling,Best case 0 ms worst case 3.0ms (period) sampling delay
+thread rasp_system.sensor_driver.process_data (path sensor_flow),0.0ms,1.0ms,processing time,0.0ms,3.0ms,deadline
+connection sensor_driver.process_data.procData_out -> communication_interface.sensor_com.sensor_in,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+thread rasp_system.communication_interface.sensor_com (path flow_sensor),0.0ms,0.0ms,sampling,0.0ms,0.0ms,sampling,Min: Best case: 0 ms sampling delay,Synchronous communication on same platform,Max: Worst case: Round up sampling delay to period 3.0ms
+thread rasp_system.communication_interface.sensor_com (path flow_sensor),0.0ms,0.5ms,processing time,0.0ms,3.0ms,deadline
+(bus ISC),0.0ms,5.0ms,transmission time,0.0ms,10.0ms,transmission time,Using data transfer time,Data size = 0. Possibly data type on port missing
+(bus ISC),0.0ms,0.0ms,queued,0.0ms,0.0ms,queued
+(bus ISC),0.0ms,0.0ms,sampling protocol/bus,0.0ms,0.0ms,sampling protocol/bus
+connection rasp_system.communication_interface.sensor_com.sensor_out -> jetson_system.main.network_gatekeeper.isc_data_in,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency,Adding latency subtotal from protocols and hardware - shown with ()
+thread jetson_system.main.network_gatekeeper (path F2),0.0ms,0.0ms,sampling,0.0ms,3.0ms,sampling,Best case 0 ms worst case 3.0ms (period) sampling delay
+thread jetson_system.main.network_gatekeeper (path F2),0.0ms,0.5ms,processing time,0.0ms,3.0ms,deadline
+connection network_gatekeeper.isc_send_data -> state_estimator.read_general_sensors,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+thread jetson_system.main.state_estimator (path F2),0.0ms,0.0ms,sampling,0.0ms,0.0ms,sampling,Min: Best case: 0 ms sampling delay,Synchronous communication on same platform,Max: Worst case: Round up sampling delay to period 3.0ms
+thread jetson_system.main.state_estimator (path F2),3.0ms,1.0ms,processing time,3.0ms,6.0ms,deadline,Max: actual latency exceeds max flow latency
+connection state_estimator.send_state_vec -> auto_ctrl.read_state_vec,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+thread jetson_system.main.auto_ctrl (path F1),0.0ms,0.0ms,sampling,0.0ms,0.0ms,sampling,Min: Best case: 0 ms sampling delay,Synchronous communication on same platform,Max: Worst case: Round up sampling delay to period 6.0ms
+thread jetson_system.main.auto_ctrl (path F1),6.0ms,3.0ms,processing time,6.0ms,12.0ms,deadline,Max: actual latency exceeds max flow latency
+Latency Total,9.001ms,11.001ms,,9.01ms,43.01ms
+Specified End To End Latency,,0.0ms,,,0.0ms
+End to end Latency Summary
+WARNING,Expected end to end latency is not specified
+
+
+
+"Latency results for end-to-end flow 'control_to_telemetry' of system 'MainSystem.impl' som_21(jetson_system.main.Unconfigured, rasp_system.PreFlight)"
+
+Result,Min Specified,Min Actual,Min Method,Max Specified,Max Actual,Max Method,Comments
+thread jetson_system.main.auto_ctrl (source F4),0.0ms,0.0ms,first sampling,0.0ms,0.0ms,first sampling
+thread jetson_system.main.auto_ctrl (source F4),6.0ms,3.0ms,processing time,6.0ms,12.0ms,deadline,Max: actual latency exceeds max flow latency
+connection auto_ctrl.send_ctrl_inputs -> network_gatekeeper.isc_read_data,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+thread jetson_system.main.network_gatekeeper (path F1),0.5ms,0.5ms,processing time,0.5ms,3.0ms,deadline,Max: actual latency exceeds max flow latency
+connection jetson_system.main.network_gatekeeper.isc_data_out -> rasp_system.communication_interface.telemetry_and_commands.external_telemetry_in,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+thread rasp_system.communication_interface.telemetry_and_commands (path telemetry_flow),0.0ms,0.0ms,sampling,0.0ms,200.0ms,sampling,Best case 0 ms worst case 200.0ms (period) sampling delay
+thread rasp_system.communication_interface.telemetry_and_commands (path telemetry_flow),0.0ms,10.0ms,processing time,0.0ms,200.0ms,deadline
+connection communication_interface.telemetry_and_commands.telemetry_out -> telemetry.telemetry_thread.telemetry_in,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+thread rasp_system.telemetry.telemetry_thread (path external_telemetry_flow),0.0ms,0.0ms,sampling,0.0ms,300.0ms,sampling,Min: Best case: 0 ms sampling delay,Synchronous communication on same platform,Max: Worst case: Round up sampling delay to period 500.0ms
+thread rasp_system.telemetry.telemetry_thread (path external_telemetry_flow),0.0ms,10.0ms,processing time,0.0ms,500.0ms,deadline
+connection telemetry.telemetry_thread.telemetry_out -> ground_station.telemetry_in,0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+device rasp_system.ground_station (sink telemetry_flow),0.0ms,0.0ms,no sampling/queuing latency,0.0ms,0.0ms,no sampling/queuing latency
+Latency Total,6.5ms,23.5ms,,6.5ms,1215.0ms
+Specified End To End Latency,,0.0ms,,,0.0ms
+End to end Latency Summary
+WARNING,Expected end to end latency is not specified
+
+
+

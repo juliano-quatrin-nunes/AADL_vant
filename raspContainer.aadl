@@ -5,7 +5,7 @@ public
 	
 	system raspberryContainer
 		features
-			com_bus: 		requires bus access interSystemCom::communicationInterfaceBus.impl;	
+			ISC: 			requires bus access interSystemCom::communicationInterfaceBus.impl;	
 			ISC_data_port: 	in out data port;	
 		flows
 			telemetry_sink:  	flow sink ISC_data_port;
@@ -39,7 +39,7 @@ public
 			c9:  port ground_station.commands_out -> telemetry.ground_commands_in;
 			c10: port telemetry.telemetry_out -> ground_station.telemetry_in;
 			c11: port communication_interface.telemetry_out -> telemetry.telemetry_external_in;
-			c12: bus access com_bus <-> cpu.com_bus;
+			c12: bus access ISC <-> cpu.com_bus;
 			c14: port ISC_data_port <-> communication_interface.ISC;
 		
 		flows
@@ -248,10 +248,6 @@ public
 			com_bus: requires bus access interSystemCom::communicationInterfaceBus.impl;
 			com_out: out data port;
 			com_in:  in data port;
-		flows
-			sensor_flow: 	flow sink 	com_in;
-			commands_flow: 	flow sink 	com_in;
-			telemetry_flow: flow source com_out {Latency => 10us .. 100us;};
 	end CommunicationDevice;
 	device implementation CommunicationDevice.impl
 	end CommunicationDevice.impl;
@@ -305,7 +301,7 @@ public
 			period => 3 ms; 
 			deadline => 3 ms;
 			priority => 5;
-			compute_execution_time => 250 us .. 500 us;
+			compute_execution_time => 1000 us .. 1500 us;
 			dispatch_offset => 50 us; -- Non-zero start time (should be lower? -> RAM write speed)
 	end Driver_data_proc.impl;
 	
@@ -322,7 +318,7 @@ public
 		period => 3 ms; 
 		deadline => 3 ms;
 		priority => 5;
-		compute_execution_time => 250 us .. 500 us;
+		compute_execution_time => 500 us .. 1 ms;
 		dispatch_offset => 50 us; -- Non-zero start time
 	end SensorCom.com;
 	thread implementation SensorCom.sensor	-- Thread to fetch sensor data from the sensors (devices)
@@ -331,7 +327,7 @@ public
 		period => 3 ms; 
 		deadline => 3 ms; --Same as period?
 		priority => 5;
-		compute_execution_time => 250 us .. 500 us;
+		compute_execution_time => 500 us .. 1 ms;
 		dispatch_offset => 50 us; -- Non-zero start time
 	end SensorCom.sensor; -- Total combined deadline is 6ms
 	

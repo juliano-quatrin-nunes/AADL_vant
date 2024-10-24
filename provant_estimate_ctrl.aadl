@@ -78,8 +78,8 @@ public
 	    	hp_sensor: flow source hp_sensors.F_SRC -> C1 -> 
 	   								  main.F1 -> C2 ->
 	   								  ISC_data_port {latency => 12ms .. 12ms;};
-	   		sensor_control_sink: 		flow sink ISC_data_port -> c2 -> main.sensor_control_flow;
-	   		control_telemetry_source: 	flow source main.control_telemetry_flow -> c2 -> ISC_data_port;
+	   		sensor_control_sink: 		flow sink ISC_data_port -> c2 -> main.sensor_control_flow {latency => 6ms .. 6ms;};
+	   		control_telemetry_source: 	flow source main.control_telemetry_flow -> c2 -> ISC_data_port {latency => 12ms .. 12ms;};
 	   		
 	   								  
 --		on_end_to_end: end to end flow hp_sensors.on_flow_src -> 
@@ -146,8 +146,8 @@ public
 			              network_gatekeeper.F1 -> C8 -> ISC
 			              {latency => 10ms .. 10ms;};
 			              
-			sensor_control_flow:	flow sink ISC -> c13 -> network_gatekeeper.F2 -> c12 -> 
-				ref_ctrl.F3 -> c7 -> auto_ctrl.F2;
+			sensor_control_flow:	flow sink ISC -> c13 -> network_gatekeeper.F2 -> c9 -> 
+				state_estimator.F2 -> c5 -> auto_ctrl.F1;
 			
 			control_telemetry_flow: flow source auto_ctrl.F4 -> C11 -> network_gatekeeper.F1 -> C8 -> ISC;
 			
@@ -294,8 +294,8 @@ public
 		properties
 			Dispatch_Protocol => Periodic;
 			Compute_Execution_Time => 500us .. 1ms;
-			Deadline => 240ms;
-			Period => 240ms;
+			Deadline => 3ms;
+			Period => 3ms;
 			Priority => 5;
 	end network_gatekeeper.impl;
 	

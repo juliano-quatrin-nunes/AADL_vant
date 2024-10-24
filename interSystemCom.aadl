@@ -1,6 +1,9 @@
 package interSystemCom
 public
 	bus communicationInterfaceBus
+		properties
+			Transmission_Time => [ Fixed => 5 ms .. 10ms;
+    				PerByte => 0 ms .. 10 ms; ];
 	end communicationInterfaceBus;
 	
 	bus implementation communicationInterfaceBus.impl

@@ -16,12 +16,12 @@ public
 			ISC: bus interSystemCom::communicationInterfaceBus.impl;
 		connections
 			c1: bus access jetson_system.ISC <-> ISC;
-			c2: bus access rasp_system.com_bus <-> ISC;
+			c2: bus access rasp_system.ISC <-> ISC;
 			c3: port jetson_system.ISC_data_port <-> rasp_system.ISC_data_port;
 		flows
 			sensor_to_control: 		end to end flow 
-						rasp_system.sensor_source -> c3 -> jetson_system.sensor_control_sink 
-						{flowconn::Link_Flow => "control_to_telemetry";};
+						rasp_system.sensor_source -> c3 -> jetson_system.sensor_control_sink;
+						
 			control_to_telemetry: 	end to end flow 
 						jetson_system.control_telemetry_source -> c3 -> rasp_system.telemetry_sink;
 			
